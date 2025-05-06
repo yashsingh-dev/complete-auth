@@ -46,7 +46,7 @@ cd complete-auth
 ### 2. Backend Setup
 
 ```
-cd backend
+cd Backend
 npm install
 
 Create a .env file
@@ -59,9 +59,31 @@ NODE_ENV = development
 JWT_ACCESS_KEY = 'dbnf47334h%#*(&%FG^$)^%^&(&%^$&^*G)'
 JWT_REFRESH_KEY = 'G^&$&(TY*&(TY*$%^G&(*)*HIH&%RT^&T*))'
 
-EMAIL_HOST = 
-EMAIL_PORT = 
-EMAIL_USER = 
-EMAIL_ADDRESS = 
-EMAIL_PASS = 
+EMAIL_HOST =
+EMAIL_PORT =
+EMAIL_USER =
+EMAIL_ADDRESS =
+EMAIL_PASS =
 ```
+
+### 3. Frontend Setup
+
+```
+cd Frontend
+npm install
+
+Create a .env file
+VITE_BACKEND_URL=http://localhost:5000
+```
+
+### 4. Run the App
+
+# Terminal 1 (Backend)
+
+cd Backend
+npm run dev
+
+# Terminal 2 (Frontend)
+
+cd Frontend
+npm run dev
