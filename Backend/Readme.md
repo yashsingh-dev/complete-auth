@@ -1,4 +1,4 @@
-## 🚧 TODO
+## 🚧 TODO - Future Work
 
 - [ ] Make a centralized error-handling middleware to avoid repetitive try-catch blocks in controllers.
 - [ ] Replace console.log with a logging library like winston or pino for better log management and monitoring.
@@ -10,5 +10,4 @@
 - [ ] Add a seperate function for remove cookie .
 - [ ] Add animation in new created page.
 - [ ] Work on optimization of frontend and backend.
-- [ ] Make api soft cordered
-- [ ] Try make a fix timer for rate limmiter like 1 min in every limitter
+- [ ] Try make a fix timer for rate limitter like 1 min in every limitter
