@@ -18,6 +18,23 @@ A full-featured authentication system built with the MERN stack, designed to fol
 
 ## 📁 MVC Folder Structure
 
+project-root/
+├── backend/
+│ ├── controllers/
+│ ├── models/
+│ ├── routes/
+│ ├── services/
+│ ├── middlewares/
+│ ├── utils/
+│ └── config/
+├── frontend/
+│ ├── src/
+│ ├── components/
+│ ├── pages/
+│ └── zustand/
+├── .gitignore
+└── README.md
+
 ---
 
 ## ✨ Features
