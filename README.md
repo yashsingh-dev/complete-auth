@@ -48,11 +48,8 @@ cd complete-auth
 ```
 cd backend
 npm install
-```
 
-#### 1. Create a .env file
 
-```
 PORT = 3000
 ORIGIN = http://localhost:5173
 DB_URL = mongodb://localhost:27017
