@@ -11,7 +11,7 @@ A full-featured authentication system built with the MERN stack, designed to fol
 - **Database**: MongoDB
 - **Auth**: JWT (Access & Refresh Tokens), Cookies (HTTP-only)
 - **Validation**: express-validator
-- **Security**: bcrypt, cookie-parser, secure JWT handling, helmet, schema check, cors, express rate limitter 
+- **Security**: bcrypt, cookie-parser, secure JWT handling, helmet, schema check, cors, express rate limitter
 - **Other Tools**: Nodemon, dotenv
 
 ---
@@ -40,11 +40,31 @@ A full-featured authentication system built with the MERN stack, designed to fol
 
 ```
 git clone https://github.com/your-username/complete-auth-system.git
-cd complete-auth-system
+cd complete-auth
 ```
 
 ### 2. Backend Setup
+
 ```
 cd backend
 npm install
+```
+
+#### 1. Create a .env file
+
+```
+PORT = 3000
+ORIGIN = http://localhost:5173
+DB_URL = mongodb://localhost:27017
+DB_NAME = secure_auth
+
+NODE_ENV = development
+JWT_ACCESS_KEY = 'dbnf47334h%#*(&%FG^$)^%^&(&%^$&^*G)'
+JWT_REFRESH_KEY = 'G^&$&(TY*&(TY*$%^G&(*)*HIH&%RT^&T*))'
+
+EMAIL_HOST = 
+EMAIL_PORT = 
+EMAIL_USER = 
+EMAIL_ADDRESS = 
+EMAIL_PASS = 
 ```
