@@ -82,7 +82,7 @@ VITE_BACKEND_URL=http://localhost:5000
 
 ```
 cd Backend
-npm run dev
+npx nodemon
 ```
 
 #### Terminal 2 (Frontend)
