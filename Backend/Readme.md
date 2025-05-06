@@ -1,6 +1,6 @@
-//TODO
+## 🚧 TODO
 
-1. Make  a centralized error-handling middleware to avoid repetitive try-catch blocks in controllers.
+- [ ] Make  a centralized error-handling middleware to avoid repetitive try-catch blocks in controllers.
 2. Replace console.log with a logging library like winston or pino for better log management and monitoring.
 3. Move Ajv schema validation logic to a separate utility or middleware file for reusability and cleaner code.
 4. Apply All Logout.
