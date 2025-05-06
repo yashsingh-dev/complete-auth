@@ -1,0 +1,47 @@
+# Node modules (frontend + backend)
+**/node_modules/
+
+# Environment files
+**/.env
+
+# Build output (React & any compiled backend)
+frontend/build/
+backend/build/
+
+# Log files
+**/logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# Coverage
+coverage/
+.nyc_output/
+
+# System files
+.DS_Store
+
+# Dependency directories
+jspm_packages/
+
+# Optional cache
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Grunt intermediate storage
+.grunt
+
+# node-waf configuration
+.lock-wscript
+
+# Compiled binary addons
+build/Release/
+
+# Public folder if used for built files (optional)
+public/
