@@ -41,3 +41,5 @@ A full-featured authentication system built with the MERN stack, designed to fol
 ```bash
 git clone https://github.com/your-username/complete-auth-system.git
 cd complete-auth-system
+
+### 2. Backend Setup
