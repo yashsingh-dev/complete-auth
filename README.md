@@ -1,6 +1,6 @@
 # 🔐 Complete Auth System (MERN Stack)
 
-A full-featured authentication system built with the MERN stack, designed to follow modern security standards. This project supports secure user login, registration, access and refresh tokens using HTTP-only cookies, logout, logout-all, token refresh, and more.
+A full-featured authentication system built with the MERN stack, designed to follow modern security standards. This project supports secure user login, registration, access and refresh tokens using HTTP-only cookies, logout, token refresh, and more.
 
 ---
 
@@ -11,7 +11,7 @@ A full-featured authentication system built with the MERN stack, designed to fol
 - **Database**: MongoDB
 - **Auth**: JWT (Access & Refresh Tokens), Cookies (HTTP-only)
 - **Validation**: express-validator
-- **Security**: bcrypt, cookie-parser, secure JWT handling
+- **Security**: bcrypt, cookie-parser, secure JWT handling, helmet, schema check, cors, express rate limitter 
 - **Other Tools**: Nodemon, dotenv
 
 ---
