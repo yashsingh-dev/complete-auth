@@ -80,10 +80,14 @@ VITE_BACKEND_URL=http://localhost:5000
 
 #### Terminal 1 (Backend)
 
+```
 cd Backend
 npm run dev
+```
 
 #### Terminal 2 (Frontend)
 
+```
 cd Frontend
 npm run dev
+```
