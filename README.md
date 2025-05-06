@@ -16,4 +16,28 @@ A full-featured authentication system built with the MERN stack, designed to fol
 
 ---
 
-## 📁 Folder Structure
+## 📁 MVC Folder Structure
+
+---
+
+## ✨ Features
+
+- ✅ User Registration & Login
+- ✅ Access + Refresh Token-based Authentication
+- ✅ Tokens stored securely in HTTP-only cookies
+- ✅ Token refresh mechanism on protected routes
+- ✅ Logout (Single Device)
+- ✅ Email Verification via OTP
+- ✅ Clean folder structure following separation of concerns
+- ✅ Input validation & sanitization
+- ✅ Error handling (to be centralized)
+
+---
+
+## 🧪 Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/complete-auth-system.git
+cd complete-auth-system
