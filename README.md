@@ -23,14 +23,25 @@ A full-featured authentication system built with the MERN stack, designed to fol
 ## ✨ Features
 
 - ✅ User Registration & Login
-- ✅ Access + Refresh Token-based Authentication
+- ✅ Advance Access + Refresh Token-based Authentication
 - ✅ Tokens stored securely in HTTP-only cookies
-- ✅ Token refresh mechanism on protected routes
+- ✅ Auto Refresh Token Rotation(RTR) mechanism on protected routes
 - ✅ Logout (Single Device)
+- ✅ Sign in with google, One Tap Google Login, Automataic Google Login
 - ✅ Email Verification via OTP
 - ✅ Clean folder structure following separation of concerns
 - ✅ Input validation & sanitization
-- ✅ Error handling (to be centralized)
+- ✅ Centralized Error handling
+- ✅ Project image on Docker **(https://hub.docker.com/r/yashsingh330/auth-project)**
+- ✅ Industry Level Code Base
+- ✅ Apply schemas check on every request in Backend
+- ✅ Secure Database with encrypted data
+- ✅ CORS Settings
+- ✅ Use Helmet for extra security
+- ✅ Use Express Rate Limiter for bulk request
+- ✅ Use Winston for logging 
+- ✅ Optimized React Frontend with zustand
+- ✅ Axios Intercepters
 
 ---
 
