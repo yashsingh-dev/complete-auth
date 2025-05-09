@@ -48,23 +48,9 @@ cd complete-auth
 ```
 cd Backend
 npm install
-
-Create a .env file
-PORT = 3000
-ORIGIN = http://localhost:5173
-DB_URL = mongodb://localhost:27017
-DB_NAME = secure_auth
-
-NODE_ENV = development
-JWT_ACCESS_KEY = 'dbnf47334h%#*(&%FG^$)^%^&(&%^$&^*G)'
-JWT_REFRESH_KEY = 'G^&$&(TY*&(TY*$%^G&(*)*HIH&%RT^&T*))'
-
-EMAIL_HOST =
-EMAIL_PORT =
-EMAIL_USER =
-EMAIL_ADDRESS =
-EMAIL_PASS =
 ```
+
+Don't forget to setup .env file from .env.sample
 
 ### 3. Frontend Setup
 

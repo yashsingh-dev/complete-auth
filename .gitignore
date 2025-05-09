@@ -9,7 +9,7 @@ frontend/build/
 backend/build/
 
 # Log files
-**/logs
+**/logs/
 *.log
 npm-debug.log*
 

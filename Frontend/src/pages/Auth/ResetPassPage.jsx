@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useNavigate, useParams } from "react-router-dom";
-import { Eye, EyeOff, Lock, LockKeyholeIcon } from "lucide-react";
+import { Eye, EyeOff, Loader, Lock, LockKeyholeIcon } from "lucide-react";
 import toast from "react-hot-toast";
-import { useResetPass } from "../../hooks/useResetPass";
 import PasswordStrengthMeter from "../../components/PasswordStrengthMeter";
+import { useAuthStore } from "../../store/useAuthStore";
+import { Constants } from "../../config/constants";
 
 const ResetPassPage = () => {
   const navigate = useNavigate();
@@ -14,21 +15,21 @@ const ResetPassPage = () => {
   const [passVisible2, setPassVisible2] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(null);
 
-  const { resetPass, loading } = useResetPass();
+  const { resetPass, loader } = useAuthStore();
   const { token } = useParams();
 
   function validation() {
     if (!password.trim()) {
-      toast.error("Password is required");
+      toast.error(Constants.PASS_REQUIRED);
       return false;
     } else if (password.trim().length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error(Constants.MIN_LENGTH_PASS);
       return false;
     } else if (password !== confirmPassword) {
-      toast.error("Password not match");
+      toast.error(Constants.PASS_NOT_MATCH);
       return false;
     } else if (passwordStrength == "Weak" || passwordStrength == "Very Weak") {
-      toast.error("Choose a strong password");
+      toast.error(Constants.CHOOSE_STRONG_PASS);
       return false;
     }
     return true;
@@ -120,9 +121,9 @@ const ResetPassPage = () => {
             whileTap={{ scale: 0.98 }}
             className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none transition duration-200 cursor-pointer"
             type="submit"
-            disabled={loading}
+            disabled={loader}
           >
-            {loading ? (
+            {loader ? (
               <Loader className="w-6 h-6 animate-spin mx-auto" />
             ) : (
               "Set New Password"

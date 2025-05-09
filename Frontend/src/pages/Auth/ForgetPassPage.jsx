@@ -3,21 +3,22 @@ import { ArrowLeft, Loader, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { useForgetPass } from "../../hooks/useForgetPass";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../../store/useAuthStore";
+import { Constants } from "../../config/constants";
 
 const ForgetPassPage = () => {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const { forgetPass, loading } = useForgetPass();
+  const { forgetPass, loader } = useAuthStore();
 
   function validation() {
     if (!email.trim()) {
-      toast.error("Email is required");
+      toast.error(Constants.EMAIL_REQUIRED);
       return false;
     }
     if (!/\S+@\S+\.\S+/.test(email)) {
-      toast.error("Invalid email format");
+      toast.error(Constants.INVALID_EMAIL);
       return false;
     }
     return true;
@@ -67,9 +68,9 @@ const ForgetPassPage = () => {
               whileTap={{ scale: 0.98 }}
               className="mt-5 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none transition duration-200 cursor-pointer"
               type="submit"
-              disabled={loading}
+              disabled={loader}
             >
-              {loading ? (
+              {loader ? (
                 <Loader className="size-6 animate-spin mx-auto" />
               ) : (
                 "Send Reset Link"

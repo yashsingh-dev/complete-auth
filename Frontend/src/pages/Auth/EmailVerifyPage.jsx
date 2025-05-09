@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { useVerifyEmail } from "../../hooks/useVerifyEmail";
+import { useNavigate, useParams } from "react-router-dom";
+import { Loader } from "lucide-react";
+import { useAuthStore } from "../../store/useAuthStore";
 
 const EmailVerifyPage = () => {
   const navigate = useNavigate();
-  const { verifyEmail, loading } = useVerifyEmail();
+  const { token } = useParams();
+  const { verifyEmail, loader } = useAuthStore();
 
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const inputRefs = useRef([]);
@@ -42,7 +44,7 @@ const EmailVerifyPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const verificationCode = code.join("");
-    const success = await verifyEmail(verificationCode);
+    const success = await verifyEmail(token, verificationCode);
     success ? navigate("/") : "";
   };
 
@@ -80,10 +82,14 @@ const EmailVerifyPage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             type="submit"
-            disabled={loading || code.some((digit) => !digit)}
+            disabled={loader || code.some((digit) => !digit)}
             className="cursor-pointer w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold py-3 px-4 rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none disabled:opacity-50"
           >
-            {loading ? "Verifying..." : "Verify Email"}
+            {loader ? (
+              <Loader className="w-6 h-6 animate-spin mx-auto" />
+            ) : (
+              "Verify Email"
+            )}
           </motion.button>
         </form>
       </motion.div>

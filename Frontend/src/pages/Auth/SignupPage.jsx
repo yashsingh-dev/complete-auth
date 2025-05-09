@@ -2,13 +2,18 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, Lock, Loader, Eye, EyeOff, UserCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSignup } from "../../hooks/useSignup";
+import GoogleOneTap from "../../components/GoogleOneTap";
 import PasswordStrengthMeter from "../../components/PasswordStrengthMeter";
 import toast from "react-hot-toast";
+import GoogleButton from "../../components/GoogleButton";
+import FacebookButton from "../../components/FacebookButton";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useAuthStore } from "../../store/useAuthStore";
+import { Constants } from "../../config/constants";
 
 const SignupPage = () => {
   const navigate = useNavigate();
-  const { signup, loading } = useSignup();
+  const { signup, googleLogin, loader } = useAuthStore();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,25 +23,25 @@ const SignupPage = () => {
 
   function validation() {
     if (!name.trim()) {
-      toast.error("Name is required");
+      toast.error(Constants.NAME_REQUIRED);
       return false;
     } else if (name.trim().length < 3) {
-      toast.error("Name must be at least 3 characters long");
+      toast.error(Constants.MIN_LENGTH_NAME);
       return false;
     } else if (!email.trim()) {
-      toast.error("Email is required");
+      toast.error(Constants.EMAIL_REQUIRED);
       return false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      toast.error("Invalid email format");
+      toast.error(Constants.INVALID_EMAIL);
       return false;
     } else if (!password.trim()) {
-      toast.error("Password is required");
+      toast.error(Constants.PASS_REQUIRED);
       return false;
     } else if (password.trim().length < 6) {
-      toast.error("Password must be at least 6 characters long");
+      toast.error(Constants.MIN_LENGTH_PASS);
       return false;
     } else if (passwordStrength == "Weak" || passwordStrength == "Very Weak") {
-      toast.error("Choose a strong password");
+      toast.error(Constants.CHOOSE_STRONG_PASS);
       return false;
     }
     return true;
@@ -51,6 +56,24 @@ const SignupPage = () => {
     }
   };
 
+  const responseGoogle = async (authResult) => {
+    try {
+      await googleLogin(authResult.code);
+    } catch (error) {
+      console.log("Error while requesting google code: ", error);
+    }
+  };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: responseGoogle,
+    onError: responseGoogle,
+    flow: "auth-code",
+  });
+
+  const handleFacebookLogin = () => {
+    console.log("Facebook login clicked");
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -59,7 +82,8 @@ const SignupPage = () => {
       className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl 
 			overflow-hidden"
     >
-      <div className="p-8">
+      <GoogleOneTap />
+      <div className="px-8 pt-8 pb-3">
         <h2 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
           Create Account
         </h2>
@@ -136,15 +160,19 @@ const SignupPage = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             type="submit"
-            disabled={loading}
+            disabled={loader}
           >
-            {loading ? (
+            {loader ? (
               <Loader className=" animate-spin mx-auto" size={24} />
             ) : (
               "Sign Up"
             )}
           </motion.button>
         </form>
+        <div className="mt-3 flex items-center justify-center gap-3">
+          <GoogleButton onClick={handleGoogleLogin} />
+          <FacebookButton onClick={handleFacebookLogin} />
+        </div>
       </div>
       <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
         <p className="text-sm text-gray-400">

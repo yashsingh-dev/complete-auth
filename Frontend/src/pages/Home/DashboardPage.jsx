@@ -3,10 +3,11 @@ import { motion } from "framer-motion";
 import { formatDate } from "../../utils/format";
 import { useAuthStore } from "../../store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
+import { Loader } from "lucide-react";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
+  const { user, isLoading, logout } = useAuthStore();
 
   useEffect(() => {
     navigate("/", { replace: true });
@@ -31,8 +32,8 @@ const DashboardPage = () => {
       <div className="space-y-6">
         <motion.div
           className="p-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
         >
           <h3 className="text-xl font-semibold text-green-400 mb-3">
@@ -44,8 +45,8 @@ const DashboardPage = () => {
 
         <motion.div
           className="pt-4 pl-4 pe-4 bg-gray-800 bg-opacity-50 rounded-lg border border-gray-700"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.4 }}
         >
           <h3 className="text-xl font-semibold text-green-400 mb-3">
@@ -53,7 +54,7 @@ const DashboardPage = () => {
           </h3>
           <p className="text-gray-300">
             <span className="font-bold">Account Verification: </span>
-            {user.isVerified? 'Done': 'Not Done'}
+            {user.isVerified ? "Done" : "Not Done"}
           </p>
           <p className="text-gray-300">
             <span className="font-bold">Joined: </span>
@@ -63,7 +64,16 @@ const DashboardPage = () => {
               day: "numeric",
             })}
           </p>
-          {user.isVerified? <p className="mb-4"></p>: <Link to='/ask-email-verify' className="hover:underline cursor-pointer text-green-400 flex justify-end mt-2 mb-2 font-medium text-sm">Complete Verification</Link>}
+          {user.isVerified ? (
+            <p className="mb-4"></p>
+          ) : (
+            <Link
+              to="/verify-email"
+              className="hover:underline cursor-pointer text-green-400 flex justify-end mt-2 mb-2 font-medium text-sm"
+            >
+              Complete Verification
+            </Link>
+          )}
         </motion.div>
       </div>
 
@@ -71,20 +81,23 @@ const DashboardPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
-        className="mt-4"
       >
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleLogout}
-          className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
+          disabled={isLoading}
+          className="mt-4 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
 				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
 				 focus:outline-none cursor-pointer"
         >
-          Logout
+          {isLoading ? (
+            <Loader className="w-6 h-6 animate-spin mx-auto" />
+          ) : (
+            "Logout"
+          )}
         </motion.button>
       </motion.div>
-
     </motion.div>
   );
 };

@@ -1,6 +1,5 @@
 //TODO
 
-1. Optimize Spinner
-2. Try to optimize input field as components
-3. Work on security of unaccess routes
-4. Make only one place for error handling
+1. Add request ID tracking for debugging (attach a requestId in headers).
+2. Add zod or yup for schema validation of responses.
+3. Implement Sign In With Google, One-tap sign-up, Automatic sign-in

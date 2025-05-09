@@ -1,20 +1,69 @@
 const express = require('express');
-const { loginSchema, signUpSchema, verifyEmailSchema, forgetPassSchema, resetPassSchema } = require('../schemas/auth.schema');
-const { loginLimiter, signupLimiter, refreshTokenLimiter, sendEmailOTPLimiter, verifyEmailLimiter, forgetPassLimiter, resetPassLimiter } = require('../middlewares/rateLimit.middleware');
-const { ProtectedRoute } = require('../middlewares/auth.middleware');
+const Schema = require('../schemas/auth.schema');
+const Limiter = require('../middlewares/rateLimit.middleware');
+const { authenticate } = require('../middlewares/auth.middleware');
 const router = express.Router();
-const { login, signup, checkAuth, logout, verifyEmail, sendVerifyEmailOtp, refreshAccessToken, forgetPassword, resetPassword } = require('../controllers/auth.controller');
+const Controller = require('../controllers/auth.controller');
 
 
-router.post('/login', loginLimiter, loginSchema, login);
-router.post('/signup', signupLimiter, signUpSchema, signup);
-router.get('/logout', ProtectedRoute, logout);
-router.get('/check-auth', ProtectedRoute, checkAuth);
-router.post('/verify-email', verifyEmailLimiter, ProtectedRoute, verifyEmailSchema, verifyEmail);
-router.get('/send-email-otp', sendEmailOTPLimiter, ProtectedRoute, sendVerifyEmailOtp);
-router.post('/forget-password', forgetPassLimiter, forgetPassSchema, forgetPassword);
-router.post('/reset-password', resetPassLimiter, resetPassSchema, resetPassword);
-router.get('/refresh-token', refreshTokenLimiter, refreshAccessToken);
+router.post('/login',
+    Limiter.login,
+    Schema.login,
+    Controller.login
+);
+
+router.post('/signup',
+    Limiter.signup,
+    Schema.signup,
+    Controller.signup
+);
+
+router.post('/google',
+    Schema.googleLogin,
+    Controller.googleLogin
+);
+
+router.post('/google-one-tap',
+    Controller.googleOneTapLogin
+);
+
+router.post('/forget-password',
+    Limiter.forgetPass,
+    Schema.forgetPass,
+    Controller.forgetPassword
+);
+
+router.post('/reset-password',
+    Schema.resetPass,
+    Controller.resetPassword
+);
+
+router.get('/logout',
+    authenticate,
+    Controller.logout
+);
+
+router.get('/check-auth',
+    authenticate,
+    Controller.checkAuth
+);
+
+router.post('/verify-email',
+    authenticate,
+    Schema.verifyEmail,
+    Controller.verifyEmail
+);
+
+router.get('/send-email-otp',
+    Limiter.sendEmailOTP,
+    authenticate,
+    Controller.sendVerifyEmailOtp
+);
+
+router.get('/refresh-token',
+    Limiter.refreshToken,
+    Controller.refreshAccessToken
+);
 
 
 module.exports = router;

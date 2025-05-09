@@ -3,38 +3,211 @@ import { axiosInstance } from "../lib/axios";
 import { Api } from "../config/api";
 import toast from "react-hot-toast";
 import { Constants } from "../config/constants";
+import { handleApiError } from "../utils/handleApiError";
 
 export const useAuthStore = create((set, get) => ({
     user: null,
     setUser: (userData) => set({ user: userData }),
+    loader: false,
     isLoading: false,
     isCheckingAuth: true,
     expiryIntervalRef: null,
-    isAccessProtectedRoute: false,
-    setAccessProtectedRoute: (value) => set({ isAccessProtectedRoute: value }),
-
 
     checkAuth: async () => {
         set({ isCheckingAuth: true });
         try {
             const response = await axiosInstance.get(Api.CHECK_USER);
             console.log("CheckAuth: ", response);
-            get().setUser(response.data);
-        } catch (error) {
-            console.log("CheckAuth Error: ", error);
-            if (error.response) {
-                get().setUser(null);
-                if (error.response.status === 429) {
-                    return toast.error("Too many Attempts! Try after some time");
-                } else if (error.response.status === 500) {
-                    toast.error(Constants.something_went_wrong);
-                }
+            if (response.data.success) {
+                get().setUser(response.data.payload);
             }
             else {
-                toast.error("Network error, please try again later");
+                get().setUser(null);
+                toast.error(Constants.SOMETHING_WENT_WRONG);
             }
+        } catch (error) {
+            handleApiError(error, { setUser: get().setUser });
         } finally {
             set({ isCheckingAuth: false });
+        }
+    },
+
+    googleLogin: async (code) => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.post(Api.GOOGLE_LOGIN, { code });
+            console.log("Google Login: ", response);
+            if (response.data.success) {
+                get().setUser(response.data.payload);
+                toast.success(Constants.LOGGED_IN_SUCCESS);
+                return true;
+            }
+            else {
+                get().setUser(null);
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error);
+            return false;
+        } finally {
+            set({ loader: false });
+        }
+    },
+
+    googleOneTapLogin: async (credentialResponse) => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.post(Api.GOOGLE_ONE_TAP_LOGIN, {
+                token: credentialResponse.credential,
+            });
+            console.log("Google One Tap: ", response);
+            if (response.data.success) {
+                get().setUser(response.data.payload);
+                toast.success(Constants.LOGGED_IN_SUCCESS);
+                return true;
+            }
+            else {
+                get().setUser(null);
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error);
+            return false;
+        } finally {
+            set({ loader: false });
+        }
+    },
+
+    login: async (email, password, rememberMe) => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.post(Api.LOGIN, { email, password, rememberMe });
+            console.log("Login: ", response);
+            if (response.data.success) {
+                get().setUser(response.data.payload);
+                toast.success(Constants.LOGGED_IN_SUCCESS);
+                return true;
+            }
+            else {
+                get().setUser(null);
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error);
+            return false;
+        } finally {
+            set({ loader: false });
+        }
+    },
+
+    signup: async (fullname, email, password) => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.post(Api.SIGNUP, { fullname, email, password });
+            console.log("Signup: ", response);
+            if (response.data.success) {
+                get().setUser(response.data.payload);
+                toast.success(Constants.SIGNUP_IN_SUCCESS);
+                return true;
+            }
+            else {
+                get().setUser(null);
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error);
+            return false;
+        } finally {
+            set({ loader: false });
+        }
+    },
+
+    forgetPass: async (email) => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.post(Api.FORGET_PASSWORD, { email });
+            console.log("Forget Pass : ", response);
+            if (response.data.success) {
+                toast.success(Constants.EMAIL_SENT_SUCCESS);
+                return true;
+            }
+            else {
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error);
+            return false;
+        } finally {
+            set({ loader: false });
+        }
+    },
+
+    resetPass: async (token, password) => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.post(Api.RESET_PASSWORD, { token, password });
+            console.log("Reset Pass : ", response);
+            if (response.data.success) {
+                toast.success(Constants.PASSWORD_RESET_SUCCESS);
+                return true;
+            }
+            else {
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error);
+            return false;
+        } finally {
+            set({ loader: false });
+        }
+    },
+
+    verifyEmail: async (token, code) => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.post(Api.VERIFY_EMAIL, { token, code });
+            console.log("verifyEmail: ", response);
+            if (response.data.success) {
+                get().setUser(response.data.payload);
+                toast.success(Constants.EMAIL_VERIFIED_SUCCESS);
+                return true;
+            }
+            else {
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error);
+            return false;
+        } finally {
+            set({ loader: false });
+        }
+    },
+
+    sendVerifyEmailOTP: async () => {
+        set({ loader: true });
+        try {
+            const response = await axiosInstance.get(Api.SEND_EMAIL_OTP);
+            console.log("sendVerifyEmailOTP: ", response);
+            if (response.data.success) {
+                toast.success(Constants.OTP_SENT_SUCCESS);
+                return response.data.payload.token;
+            }
+            else {
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+            return false;
+        } catch (error) {
+            handleApiError(error, { setUser: get().setUser });
+            return false;
+        } finally {
+            set({ loader: false });
         }
     },
 
@@ -43,16 +216,15 @@ export const useAuthStore = create((set, get) => ({
         try {
             let response = await axiosInstance.get(Api.LOGOUT);
             console.log("Logout: ", response);
-            get().setUser(null);
-            toast.success("Logged out successfully");
-        } catch (error) {
-            console.log("Logout Error: ", error);
-            if (error.response) {
-                toast.error(Constants.something_went_wrong);
+            if (response.data.success) {
+                get().setUser(null);
+                toast.success(Constants.LOGOUT_SUCCESS);
             }
             else {
-                toast.error("Network error, please try again later.");
+                toast.error(Constants.SOMETHING_WENT_WRONG);
             }
+        } catch (error) {
+            handleApiError(error, { setUser: get().setUser });
         } finally {
             set({ isLoading: false });
         }
@@ -62,22 +234,15 @@ export const useAuthStore = create((set, get) => ({
         try {
             const response = await axiosInstance.get(Api.REFRESH_TOKEN);
             console.log("Refresh Token: ", response);
-            const currentUser = get().user;
-            set({ user: { ...currentUser, tokenExp: response.data.tokenExp } });
-        } catch (error) {
-            console.log("Refresh Token Error", error);
-            if (error.response) {
-                if (error.response.status === 401) {
-                    console.log("Refresh token missing");
-                    toast.error('Session expired, please log in again');
-                }
-                else if (error.response.status === 429) {
-                    toast.error("Too many Attempts! Try after some time");
-                }
+            if (response.data.success) {
+                const currentUser = get().user;
+                set({ user: { ...currentUser, tokenExp: response.data.payload.tokenExp } });
             }
             else {
-                toast.error("Network error, please try again later.");
+                toast.error(Constants.SOMETHING_WENT_WRONG);
             }
+        } catch (error) {
+            handleApiError(error, { setUser: get().setUser });
             get().stopTokenExpiryMonitor();
             set({ user: null });
         }

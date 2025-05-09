@@ -1,15 +1,18 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import GoogleButton from "../../components/GoogleButton";
+import FacebookButton from "../../components/FacebookButton";
+import GoogleOneTap from "../../components/GoogleOneTap";
 import { Mail, Lock, Loader, Eye, EyeOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../../store/useAuthStore";
 import toast from "react-hot-toast";
-import { useLogin } from "../../hooks/useLogin";
+import { useGoogleLogin } from "@react-oauth/google";
+import { Constants } from "../../config/constants";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login, loading } = useLogin(); //Custom Hook
-  const { user } = useAuthStore(); //Store
+  const { user, login, googleLogin, loader } = useAuthStore();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,16 +21,16 @@ const LoginPage = () => {
 
   function validation() {
     if (!email.trim()) {
-      toast.error("Email is required");
+      toast.error(Constants.EMAIL_REQUIRED);
       return false;
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      toast.error("Invalid email format");
+      toast.error(Constants.INVALID_EMAIL);
       return false;
     } else if (!password.trim()) {
-      toast.error("Password is required");
+      toast.error(Constants.PASS_REQUIRED);
       return false;
     } else if (password.trim().length < 6) {
-      toast.error("Password must be at least 6 characters");
+      toast.error(Constants.MIN_LENGTH_PASS);
       return false;
     }
     return true;
@@ -41,9 +44,27 @@ const LoginPage = () => {
       success
         ? user?.isVerified
           ? navigate("/")
-          : navigate("/ask-email-verify")
+          : navigate("/verify-email")
         : "";
     }
+  };
+
+  const responseGoogle = async (authResult) => {
+    try {
+      await googleLogin(authResult.code);
+    } catch (error) {
+      console.log("Error while requesting google code: ", error);
+    }
+  };
+
+  const handleGoogleLogin = useGoogleLogin({
+    onSuccess: responseGoogle,
+    onError: responseGoogle,
+    flow: "auth-code",
+  });
+
+  const handleFacebookLogin = () => {
+    console.log("Facebook login clicked");
   };
 
   return (
@@ -53,7 +74,8 @@ const LoginPage = () => {
       transition={{ duration: 0.5 }}
       className="max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden"
     >
-      <div className="p-8">
+      <GoogleOneTap />
+      <div className="pt-8 px-8 pb-3">
         <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text">
           Welcome Back
         </h2>
@@ -147,15 +169,20 @@ const LoginPage = () => {
             whileTap={{ scale: 0.98 }}
             className="w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none transition duration-200 cursor-pointer"
             type="submit"
-            disabled={loading}
+            disabled={loader}
           >
-            {loading ? (
+            {loader ? (
               <Loader className="w-6 h-6 animate-spin mx-auto" />
             ) : (
               "Login"
             )}
           </motion.button>
         </form>
+
+        <div className="mt-3 flex items-center justify-center gap-3">
+          <GoogleButton onClick={handleGoogleLogin} />
+          <FacebookButton onClick={handleFacebookLogin} />
+        </div>
       </div>
       <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
         <p className="text-sm text-gray-400">

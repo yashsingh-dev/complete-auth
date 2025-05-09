@@ -1,4 +1,5 @@
 const { transport, sender } = require("../config/mail.config");
+const logger = require('../config/logger.config');
 const { VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE, PASSWORD_RESET_REQUEST_TEMPLATE, PASSWORD_RESET_SUCCESS_TEMPLATE } = require("./emailTemplate");
 
 module.exports.sendVerificationEmail = async (email, otp) => {
@@ -11,9 +12,9 @@ module.exports.sendVerificationEmail = async (email, otp) => {
             html: VERIFICATION_EMAIL_TEMPLATE.replace("{verificationCode}", otp),
         });
 
-        console.log("Verify email sent successfully");
+        logger.info("Verify email sent successfully");
     } catch (error) {
-        console.error(`Error sending verification email: `, error);
+        logger.error(`Error sending verification email: `, error);
         throw error;
     }
 }
@@ -28,9 +29,9 @@ module.exports.sendWelcomeEmail = async (email, name) => {
             html: WELCOME_EMAIL_TEMPLATE.replace("{userName}", name),
         });
 
-        console.log("Welcome email sent successfully");
+        logger.info("Welcome email sent successfully");
     } catch (error) {
-        console.error(`Error sending welcome email: `, error);
+        logger.error(`Error sending welcome email: `, error);
         throw error;
     }
 }
@@ -45,9 +46,9 @@ module.exports.sendPasswordResetEmail = async (email, resetURL) => {
             html: PASSWORD_RESET_REQUEST_TEMPLATE.replace("{resetURL}", resetURL),
         });
 
-        console.log("Reset password email sent successfully");
+        logger.info("Reset password email sent successfully");
     } catch (error) {
-        console.error(`Error sending reset password email: `, error);
+        logger.error(`Error sending reset password email: `, error);
         throw error;
     }
 }
@@ -62,9 +63,9 @@ module.exports.sendResetSuccessEmail = async (email) => {
             html: PASSWORD_RESET_SUCCESS_TEMPLATE,
         });
 
-        console.log("Password reset successfully");
+        logger.info("Password reset successfully");
     } catch (error) {
-        console.error(`Password reset successfully error: `, error);
+        logger.error(`Password reset successfully error: `, error);
         throw error;
     }
 }

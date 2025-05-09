@@ -1,6 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { refreshAccessToken } from '../store/useAuthStore';
+import { Constants } from "../config/constants";
 
 export const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_BACKEND_HOST,
@@ -23,19 +24,19 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         if (error.response) {
             const { status, data } = error.response;
-            console.log("Status: ",status);
-            console.log("Data: ",data);
+            console.log("Status: ", status);
+            console.log("Data: ", data.payload);
             if (
                 status === 401 &&
-                (data.message === 'Token expired, please login again' ||
-                    data.message === 'Access token missing')
+                (data.message === 'token_expired_please_login_again' ||
+                    data.message === 'access_token_missing')
             ) {
                 try {
                     await refreshAccessToken();
                     return axiosInstance(error.config);
                 } catch (refreshError) {
                     console.log('Refresh token failed', refreshError);
-                    toast.error('Session expired. Please log in again.');
+                    toast.error(Constants.SESSION_EXPIRED);
                     return Promise.reject(refreshError);
                 }
             }

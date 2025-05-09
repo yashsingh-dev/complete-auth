@@ -1,0 +1,34 @@
+# ⛔ Ignore local dependencies (they will be installed fresh inside image)
+
+node_modules
+
+# ⛔ Ignore logs and temp files
+
+logs
+\*.log
+
+# ⛔ Ignore environment variables
+
+.env
+
+# ⛔ Ignore Docker-related files if not needed inside the image
+
+Dockerfile
+docker-compose.yml
+
+# ⛔ Ignore version control and metadata
+
+.git
+.gitignore
+
+# ⛔ Ignore editor/IDE related files
+
+.vscode
+_.swp
+_.swo
+\*.idea
+
+# ⛔ Ignore OS/system junk
+
+.DS_Store
+Thumbs.db

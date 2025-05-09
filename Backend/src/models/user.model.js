@@ -13,11 +13,18 @@ const userModel = mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
         select: false,
         minLength: [6, "Password must be atleast 3 character long"]
     },
     isVerified: {
+        type: Boolean,
+        default: false,
+    },
+    tokenVersion: {
+        type: Number,
+        default: 0
+    },
+    isGoogleAccount: {
         type: Boolean,
         default: false,
     },

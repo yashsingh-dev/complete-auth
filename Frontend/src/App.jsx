@@ -13,7 +13,7 @@ import ForgetPassPage from "./pages/Auth/ForgetPassPage";
 import ResetPassPage from "./pages/Auth/ResetPassPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AuthenticatedUser from "./routes/AuthenticatedUser";
-import NotAccessibleRoute from "./routes/NotAccessibleRoute";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   const {
@@ -40,70 +40,76 @@ function App() {
   }
 
   return (
-    <Background>
-      <Routes>
-        <Route
-          path="/login"
-          element={
-            <AuthenticatedUser>
-              <LoginPage />
-            </AuthenticatedUser>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <AuthenticatedUser>
-              <SignupPage />
-            </AuthenticatedUser>
-          }
-        />
-        <Route
-          path="/forgot-password"
-          element={
-            <AuthenticatedUser>
-              <ForgetPassPage />
-            </AuthenticatedUser>
-          }
-        />
-        <Route
-          path="/reset-password/:token"
-          element={
-            <AuthenticatedUser>
-              <ResetPassPage />
-            </AuthenticatedUser>
-          }
-        />
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/verify-email"
-          element={
-            <NotAccessibleRoute>
-              <EmailVerifyPage />
-            </NotAccessibleRoute>
-          }
-        />
-        <Route
-          path="/ask-email-verify"
-          element={
-            <ProtectedRoute>
-              {user?.isVerified ? <Navigate to="/" /> : <AskEmailVerifyPage />}
-            </ProtectedRoute>
-          }
-        />
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_KEY}>
+      <Background>
+        <Routes>
+          <Route
+            path="/login"
+            element={
+              <AuthenticatedUser>
+                <LoginPage />
+              </AuthenticatedUser>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <AuthenticatedUser>
+                <SignupPage />
+              </AuthenticatedUser>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <AuthenticatedUser>
+                <ForgetPassPage />
+              </AuthenticatedUser>
+            }
+          />
+          <Route
+            path="/reset-password/:token"
+            element={
+              <AuthenticatedUser>
+                <ResetPassPage />
+              </AuthenticatedUser>
+            }
+          />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <DashboardPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/verify-email/:token"
+            element={
+              <ProtectedRoute>
+                {user?.isVerified ? <Navigate to="/" /> : <EmailVerifyPage />}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/verify-email"
+            element={
+              <ProtectedRoute>
+                {user?.isVerified ? (
+                  <Navigate to="/" />
+                ) : (
+                  <AskEmailVerifyPage />
+                )}
+              </ProtectedRoute>
+            }
+          />
 
-        <Route path="*" element={<Navigate to="/" />} />
-      </Routes>
+          <Route path="*" element={<Navigate to="/" />} />
+        </Routes>
 
-      <Toaster />
-    </Background>
+        <Toaster />
+      </Background>
+    </GoogleOAuthProvider>
   );
 }
 

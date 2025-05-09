@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 input[type="email"]:-webkit-autofill {
-    background-color: #f7f7f7;
-    color: white;
-    transition: red 5000s ease-in-out 0s; 
-  }
+  background-color: #f7f7f7;
+  color: white;
+  transition: red 5000s ease-in-out 0s;
+}

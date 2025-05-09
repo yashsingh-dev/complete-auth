@@ -1,60 +1,47 @@
 const rateLimit = require('express-rate-limit');
+const { MESSAGES } = require('../config/constants');
 
-const globalLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
-    max: 200,
-    message: 'Too many requests. Please slow down.'
+const global = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    max: 150,
+    message: MESSAGES.TOO_MANY_REQUEST
 });
 
-const loginLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000,
-    max: 50, //TODO
-    message: 'Too many login attempts. Try again later.'
-});
-
-const signupLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000,
-    max: 50, //TODO
-    message: 'Too many signups. Try again later.'
-});
-
-const refreshTokenLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000,
-    max: 7,
-    message: 'Too many refresh attempts. Slow down.'
-});
-
-const sendEmailOTPLimiter = rateLimit({
+const login = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 10,
-    message: 'Too many attempts. Slow down.'
+    message: MESSAGES.TOO_MANY_LOGIN_REQUEST
 });
 
-const verifyEmailLimiter = rateLimit({
+const signup = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 10,
-    message: 'Too many attempts. Slow down.'
+    message: MESSAGES.TOO_MANY_SIGNUP_REQUEST
 });
 
-const forgetPassLimiter = rateLimit({
+const refreshToken = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 10,
-    message: 'Too many attempts. Slow down.'
+    message: MESSAGES.TOO_MANY_REQUEST
 });
 
-const resetPassLimiter = rateLimit({
+const sendEmailOTP = rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 10,
-    message: 'Too many attempts. Slow down.'
+    message: MESSAGES.TOO_MANY_REQUEST
+});
+
+const forgetPass = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 10,
+    message: MESSAGES.TOO_MANY_REQUEST
 });
 
 module.exports = {
-    loginLimiter,
-    signupLimiter,
-    globalLimiter,
-    refreshTokenLimiter,
-    sendEmailOTPLimiter,
-    verifyEmailLimiter,
-    forgetPassLimiter,
-    resetPassLimiter
+    login,
+    signup,
+    global,
+    refreshToken,
+    sendEmailOTP,
+    forgetPass
 };
