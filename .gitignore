@@ -8,8 +8,8 @@
 frontend/build/
 backend/build/
 
-frontend/README.md
-backend/README.md
+Frontend/Readme.md
+Backend/Readme.md
 
 # Log files
 **/logs/
