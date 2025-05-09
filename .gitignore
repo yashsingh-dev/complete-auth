@@ -5,8 +5,8 @@
 **/.env
 
 # Build output (React & any compiled backend)
-frontend/build/
-backend/build/
+Frontend/build/
+Backend/build/
 
 Frontend/Readme.md
 Backend/Readme.md
