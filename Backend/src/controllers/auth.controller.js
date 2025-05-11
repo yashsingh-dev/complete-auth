@@ -181,6 +181,10 @@ const logout = async (req, res) => {
         const secret_key = process.env.JWT_REFRESH_KEY || 'default-key';
         const user = await jwt.verify(refreshToken, secret_key);
         if (!user) {
+            // Clear Cookie
+            clearCookie(res, COOKIES.ACCESS_TOKEN);
+            clearCookie(res, COOKIES.REFRESH_TOKEN);
+
             return res.status(409).json({ success: false, message: MESSAGES.USER_NOT_FOUND })
         }
 
@@ -366,6 +370,11 @@ const refreshAccessToken = async (req, res) => {
         const hashRefreshToken = secureHash(oldRefreshToken);
         const tokenDoc = await refreshTokenModel.findOne({ token: hashRefreshToken });
         if (!tokenDoc) {
+
+            // Clear Cookie
+            clearCookie(res, COOKIES.ACCESS_TOKEN);
+            clearCookie(res, COOKIES.REFRESH_TOKEN);
+
             return res.status(403).json({ success: false, message: MESSAGES.INVALID_REFRESH_TOKEN });
         }
 
@@ -385,6 +394,11 @@ const refreshAccessToken = async (req, res) => {
         const user = await userModel.findById(decoded._id);
 
         if (!user) {
+
+            // Clear Cookie
+            clearCookie(res, COOKIES.ACCESS_TOKEN);
+            clearCookie(res, COOKIES.REFRESH_TOKEN);
+
             return res.status(409).json({ success: false, message: MESSAGES.USER_NOT_FOUND });
         }
 
@@ -414,6 +428,11 @@ const refreshAccessToken = async (req, res) => {
             //Remove this expired token hash from DB
             const hashRefreshToken = secureHash(oldRefreshToken);
             await refreshTokenModel.findOneAndDelete({ token: hashRefreshToken });
+
+            // Clear Cookie
+            clearCookie(res, COOKIES.ACCESS_TOKEN);
+            clearCookie(res, COOKIES.REFRESH_TOKEN);
+
             return res.status(401).json({ success: false, error: MESSAGES.SESSION_EXPIRE });
         }
         return res.status(500).json({ success: false, error: MESSAGES.INTERNAL_SERVER_ERROR });
