@@ -5,18 +5,6 @@ import { useGoogleOneTapLogin } from "@react-oauth/google";
 const GoogleOneTap = () => {
   const { user, googleOneTapLogin } = useAuthStore();
 
-  // useGoogleOneTapLogin({
-  //   onSuccess: async (credentialResponse) => {
-  //     await googleOneTapLogin(credentialResponse);
-  //   },
-  //   onError: () => {
-  //     console.log("Google One Tap login failed");
-  //   },
-
-  //   promptMomentNotification: () => {},
-  //   disabled: !!user,
-  // });
-
   useEffect(() => {
     if (user || !window.google?.accounts?.id) return;
 
