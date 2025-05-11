@@ -366,7 +366,7 @@ const refreshAccessToken = async (req, res) => {
         const hashRefreshToken = secureHash(oldRefreshToken);
         const tokenDoc = await refreshTokenModel.findOne({ token: hashRefreshToken });
         if (!tokenDoc) {
-                
+            return res.status(403).json({ success: false, message: MESSAGES.INVALID_REFRESH_TOKEN });
         }
 
         // Verify refresh token and expiry using its secret key
