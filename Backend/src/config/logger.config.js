@@ -1,8 +1,23 @@
 const { createLogger, format, transports } = require('winston');
 const path = require('path');
+const fs = require('fs');
 
+// Make sure log directory exists
 const logDirectory = path.resolve(__dirname, '../../logs');
-const isProduction = process.env.NODE_ENV === 'production';
+if (!fs.existsSync(logDirectory)) {
+    fs.mkdirSync(logDirectory);
+}
+
+// 🌈 Custom colors with background styles
+const customColors = {
+    info: 'black bgGreen',
+    warn: 'black bgYellow',
+    error: 'white bgRed',
+    debug: 'white bgBlue',
+};
+require('winston').addColors(customColors);
+
+const isProduction = (process.env.NODE_ENV || 'development') === 'production';
 
 const logger = createLogger({
     level: isProduction ? 'info' : 'debug',
@@ -13,21 +28,22 @@ const logger = createLogger({
         format.json()
     ),
     transports: [
-        new transports.File({ filename: path.join(logDirectory, 'error.log',), level: 'error' }),
+        new transports.File({ filename: path.join(logDirectory, 'error.log'), level: 'error' }),
         new transports.File({ filename: path.join(logDirectory, 'combined.log') }),
     ],
 });
 
+// 🎨 Console logger with background colors for levels
 if (!isProduction) {
     logger.add(new transports.Console({
         format: format.combine(
-            format.colorize(),
-            format.printf(({ level, message, timestamp }) => {
-                return `[${timestamp}] ${level}: ${message}`;
+            format.colorize({ all: true }), // Color entire log line
+            format.printf(({ timestamp, level, message, stack }) => {
+                const logMsg = `[${timestamp}] ${level}: ${message}`;
+                return stack ? `${logMsg}\n${stack}` : logMsg;
             })
         ),
     }));
 }
-
 
 module.exports = logger;

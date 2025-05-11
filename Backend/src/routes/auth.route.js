@@ -19,7 +19,6 @@ router.post('/signup',
 );
 
 router.post('/google',
-    Schema.googleLogin,
     Controller.googleLogin
 );
 

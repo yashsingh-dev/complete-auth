@@ -278,7 +278,7 @@ const verifyEmail = async (req, res) => {
     }
 }
 
-const forgetPassword = async (req, res, next) => {
+const forgetPassword = async (req, res) => {
     try {
         const { email } = req.body;
 
@@ -314,7 +314,7 @@ const forgetPassword = async (req, res, next) => {
     }
 }
 
-const resetPassword = async (req, res, next) => {
+const resetPassword = async (req, res) => {
     try {
         const { token, password } = req.body;
 

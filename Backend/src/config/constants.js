@@ -1,5 +1,6 @@
 module.exports = {
     MESSAGES: {
+        MISSING_VALUES: "missing_values",
         USER_NOT_FOUND: "user_not_found",
         LOGIN_SUCCESS: "login_successfully",
         SIGNUP_SUCCESS: "signup_successfully",
