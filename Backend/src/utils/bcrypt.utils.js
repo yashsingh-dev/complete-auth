@@ -1,10 +1,10 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const logger = require('../config/logger.config');
 
 module.exports.createHash = async (input) => {
     try {
-        const salt = await bcrypt.genSalt();
-        const hash = await bcrypt.hash(input, salt);
+        const salt = await bcrypt.genSaltSync(10);
+        const hash = await bcrypt.hashSync(input, salt);
         return hash;
     } catch (error) {
         logger.error("Error while creating hash : ", error);
@@ -14,7 +14,7 @@ module.exports.createHash = async (input) => {
 
 module.exports.verifyHash = async (input, hash) => {
     try {
-        return await bcrypt.compare(input, hash);
+        return await bcrypt.compareSync(input, hash);
     } catch (error) {
         logger.error("Error while verifying hash: ", error);
         throw error;
