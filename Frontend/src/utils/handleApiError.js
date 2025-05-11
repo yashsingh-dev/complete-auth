@@ -1,9 +1,9 @@
 import toast from "react-hot-toast";
 import { Constants } from "../config/constants";
 
-export const handleApiError = (error, options = {}) => {
+export const handleApiError = (name, error, options = {}) => {
     const { setUser } = options;
-    console.error("API Error: ", error);
+    console.error(`API Error by ${name}: `, error);
 
     if (error.response) {
         const { status, data } = error.response;

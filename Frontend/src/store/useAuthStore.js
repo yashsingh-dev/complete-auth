@@ -26,7 +26,7 @@ export const useAuthStore = create((set, get) => ({
                 toast.error(Constants.SOMETHING_WENT_WRONG);
             }
         } catch (error) {
-            handleApiError(error, { setUser: get().setUser });
+            handleApiError("CheckAuth", error, { setUser: get().setUser });
         } finally {
             set({ isCheckingAuth: false });
         }
@@ -48,7 +48,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error);
+            handleApiError("googleLogin", error);
             return false;
         } finally {
             set({ loader: false });
@@ -73,7 +73,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error);
+            handleApiError("googleOneTapLogin", error);
             return false;
         } finally {
             set({ loader: false });
@@ -96,7 +96,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error);
+            handleApiError("Login", error);
             return false;
         } finally {
             set({ loader: false });
@@ -119,7 +119,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error);
+            handleApiError("Signup", error);
             return false;
         } finally {
             set({ loader: false });
@@ -140,7 +140,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error);
+            handleApiError("Forget Pass", error);
             return false;
         } finally {
             set({ loader: false });
@@ -161,7 +161,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error);
+            handleApiError("Reset Pass", error);
             return false;
         } finally {
             set({ loader: false });
@@ -183,7 +183,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error);
+            handleApiError("Verify Email", error);
             return false;
         } finally {
             set({ loader: false });
@@ -193,7 +193,7 @@ export const useAuthStore = create((set, get) => ({
     sendVerifyEmailOTP: async () => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.get(Api.SEND_EMAIL_OTP);``
+            const response = await axiosInstance.get(Api.SEND_EMAIL_OTP); ``
             console.log("sendVerifyEmailOTP: ", response);
             if (response.data.success) {
                 toast.success(Constants.OTP_SENT_SUCCESS);
@@ -204,7 +204,7 @@ export const useAuthStore = create((set, get) => ({
             }
             return false;
         } catch (error) {
-            handleApiError(error, { setUser: get().setUser });
+            handleApiError("Send Verify Email OTP", error, { setUser: get().setUser });
             return false;
         } finally {
             set({ loader: false });
@@ -224,7 +224,7 @@ export const useAuthStore = create((set, get) => ({
                 toast.error(Constants.SOMETHING_WENT_WRONG);
             }
         } catch (error) {
-            handleApiError(error, { setUser: get().setUser });
+            handleApiError("Logout", error, { setUser: get().setUser });
         } finally {
             set({ isLoading: false });
         }
@@ -242,9 +242,9 @@ export const useAuthStore = create((set, get) => ({
                 toast.error(Constants.SOMETHING_WENT_WRONG);
             }
         } catch (error) {
-            handleApiError(error, { setUser: get().setUser });
+            handleApiError("Refresh Token", error, { setUser: get().setUser });
             get().stopTokenExpiryMonitor();
-            set({ user: null });
+            throw error;
         }
     },
 
