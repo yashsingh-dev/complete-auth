@@ -225,8 +225,6 @@ const sendVerifyEmailOtp = async (req, res) => {
             code: otp
         });
 
-        console.log("OTP: ", otp);
-
         return res.status(200).json({
             success: true,
             message: MESSAGES.OTP_SEND,
