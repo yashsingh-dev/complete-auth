@@ -193,7 +193,7 @@ export const useAuthStore = create((set, get) => ({
     sendVerifyEmailOTP: async () => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.get(Api.SEND_EMAIL_OTP);
+            const response = await axiosInstance.get(Api.SEND_EMAIL_OTP);``
             console.log("sendVerifyEmailOTP: ", response);
             if (response.data.success) {
                 toast.success(Constants.OTP_SENT_SUCCESS);

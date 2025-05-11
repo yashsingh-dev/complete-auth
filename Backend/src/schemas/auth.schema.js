@@ -36,15 +36,6 @@ const verifyEmailSchema = {
     additionalProperties: false,
 }
 
-const googleSchema = {
-    type: "object",
-    properties: {
-        code: { type: "string" }
-    },
-    required: ["code"],
-    additionalProperties: false,
-}
-
 const forgetPassSchema = {
     type: "object",
     properties: {
@@ -66,7 +57,6 @@ const resetPassSchema = {
 
 const login = schemaValidation(loginSchema);
 const signup = schemaValidation(signupSchema);
-const googleLogin = schemaValidation(googleSchema);
 const verifyEmail = schemaValidation(verifyEmailSchema);
 const forgetPass = schemaValidation(forgetPassSchema);
 const resetPass = schemaValidation(resetPassSchema);
@@ -74,7 +64,6 @@ const resetPass = schemaValidation(resetPassSchema);
 module.exports = {
     login,
     signup,
-    googleLogin,
     verifyEmail,
     forgetPass,
     resetPass,

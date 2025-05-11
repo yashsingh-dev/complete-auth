@@ -7,6 +7,8 @@ export const handleApiError = (error, options = {}) => {
 
     if (error.response) {
         const { status, data } = error.response;
+        console.log("Status: ", status);
+        console.log("Data: ", data);
         if (status === 400) {
             if (data.error) {
                 (error.response.data?.error[0].schemaPath === '#/properties/email/format') ?
@@ -78,7 +80,7 @@ export const handleApiError = (error, options = {}) => {
                 // Hacker Attack
             }
         }
-        else if (status === 429) {
+        else if (status === 429) {  
             if (data.message === 'too_many_requests_please_slow_down') {
                 toast.error(Constants.TOO_MANY_REQUEST);
             }
