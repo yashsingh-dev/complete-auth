@@ -7,6 +7,7 @@ import removeConsole from 'vite-plugin-remove-console';
 export default defineConfig({
   plugins: [tailwindcss(), react(), removeConsole()],
   server: {
+     host: '0.0.0.0',
     port: 5173,
   },
 })
