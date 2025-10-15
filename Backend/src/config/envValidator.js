@@ -11,6 +11,8 @@ dotenv.config({
 // Schema validation using Joi
 const envSchema = Joi.object({
   DB_URL: Joi.string().uri().required(),
+  NODE_ENV: Joi.string().valid('development', 'production', 'test').required(),
+  PORT: Joi.number().default(3000),
   EMAIL_HOST: Joi.string().required(),
   EMAIL_PORT: Joi.number().required(),
   EMAIL_USER: Joi.string().email().required(),

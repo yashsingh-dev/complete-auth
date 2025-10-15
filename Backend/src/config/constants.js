@@ -58,5 +58,19 @@ module.exports = {
     },
     FORGET_PASS: {
         EXPIRY_MS: Date.now() + 15 * 60 * 1000,
+    },
+    RATE_LIMITTER: {
+        GLOBAL_WINDOW_MS: 10 * 60 * 1000,
+        GLOBAL_MAX: 150,
+        LOGIN_WINDOW_MS: 5 * 60 * 1000,
+        LOGIN_MAX: 10,
+        SIGNUP_WINDOW_MS: 5 * 60 * 1000,
+        SIGNUP_MAX: 10,
+        REFRESH_TOKEN_WINDOW_MS: 5 * 60 * 1000,
+        REFRESH_TOKEN_MAX: 10,
+        SEND_EMAIL_OTP_WINDOW_MS: 5 * 60 * 1000,
+        SEND_EMAIL_OTP_MAX: 10,
+        FORGET_PASS_WINDOW_MS: 5 * 60 * 1000,
+        FORGET_PASS_MAX: 10
     }
 };

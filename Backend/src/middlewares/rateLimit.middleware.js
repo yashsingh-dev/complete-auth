@@ -1,39 +1,39 @@
 const rateLimit = require('express-rate-limit');
-const { MESSAGES } = require('../config/constants');
+const { MESSAGES, RATE_LIMITTER } = require('../config/constants');
 
 const global = rateLimit({
-    windowMs: 10 * 60 * 1000,
-    max: 150,
+    windowMs: RATE_LIMITTER.GLOBAL_WINDOW_MS,
+    max: RATE_LIMITTER.GLOBAL_MAX,
     message: MESSAGES.TOO_MANY_REQUEST
 });
 
 const login = rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 10,
+    windowMs: RATE_LIMITTER.LOGIN_WINDOW_MS,
+    max: RATE_LIMITTER.LOGIN_MAX,
     message: MESSAGES.TOO_MANY_LOGIN_REQUEST
 });
 
 const signup = rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 10,
+    windowMs: RATE_LIMITTER.SIGNUP_WINDOW_MS,
+    max: RATE_LIMITTER.SIGNUP_MAX,
     message: MESSAGES.TOO_MANY_SIGNUP_REQUEST
 });
 
 const refreshToken = rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 10,
+    windowMs: RATE_LIMITTER.REFRESH_TOKEN_WINDOW_MS,
+    max: RATE_LIMITTER.REFRESH_TOKEN_MAX,
     message: MESSAGES.TOO_MANY_REQUEST
 });
 
 const sendEmailOTP = rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 10,
+    windowMs: RATE_LIMITTER.SEND_EMAIL_OTP_WINDOW_MS,
+    max: RATE_LIMITTER.SEND_EMAIL_OTP_MAX,
     message: MESSAGES.TOO_MANY_REQUEST
 });
 
 const forgetPass = rateLimit({
-    windowMs: 5 * 60 * 1000,
-    max: 10,
+    windowMs: RATE_LIMITTER.FORGET_PASS_WINDOW_MS,
+    max: RATE_LIMITTER.FORGET_PASS_MAX,
     message: MESSAGES.TOO_MANY_REQUEST
 });
 
