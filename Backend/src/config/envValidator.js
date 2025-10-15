@@ -4,7 +4,7 @@ const logger = require('../config/logger.config');
 
 // TODO Production
 dotenv.config({
-  example: '.env.sample',
+  example: '.env.example',
   allowEmptyValues: false
 });
 
