@@ -18,7 +18,7 @@ app.set('trust proxy', 1);
 app.use(helmet());
 app.use(Limiter.global);
 app.use(cors({
-    origin: [process.env.ORIGIN, 'http://localhost:5173'],
+    CLIENT_URL_DEV: [process.env.CLIENT_URL_DEV, 'http://localhost:5173'],
     credentials: true
 }));
 app.use(cookieParser());
