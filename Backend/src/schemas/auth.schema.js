@@ -15,7 +15,7 @@ const loginSchema = {
     additionalProperties: false,
 };
 
-const signupSchema = {
+const registerSchema = {
     type: "object",
     properties: {
         fullname: { type: "string", minLength: 3 },
@@ -56,14 +56,14 @@ const resetPassSchema = {
 }
 
 const login = schemaValidation(loginSchema);
-const signup = schemaValidation(signupSchema);
+const register = schemaValidation(registerSchema);
 const verifyEmail = schemaValidation(verifyEmailSchema);
 const forgetPass = schemaValidation(forgetPassSchema);
 const resetPass = schemaValidation(resetPassSchema);
 
 module.exports = {
     login,
-    signup,
+    register,
     verifyEmail,
     forgetPass,
     resetPass,

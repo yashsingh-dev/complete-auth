@@ -68,7 +68,7 @@ const login = async (req, res) => {
     }
 }
 
-const signup = async (req, res) => {
+const register = async (req, res) => {
     try {
         let { fullname, email, password } = req.body;
 
@@ -95,7 +95,7 @@ const signup = async (req, res) => {
         // Send Response
         return res.status(201).json({
             success: true,
-            message: MESSAGES.SIGNUP_SUCCESS,
+            message: MESSAGES.REGISTER_SUCCESS,
             payload: {
                 ...new_user.toObject(),
                 password: undefined,
@@ -104,7 +104,7 @@ const signup = async (req, res) => {
         });
     }
     catch (error) {
-        logger.error("Signup Error: ", error);
+        logger.error("Register Error: ", error);
         return res.status(500).json({ success: false, error: MESSAGES.INTERNAL_SERVER_ERROR });
     }
 }
@@ -440,4 +440,4 @@ const refreshAccessToken = async (req, res) => {
 }
 
 
-module.exports = { login, signup, checkAuth, logout, verifyEmail, sendVerifyEmailOtp, refreshAccessToken, forgetPassword, resetPassword, googleLogin, googleOneTapLogin };
+module.exports = { login, register, checkAuth, logout, verifyEmail, sendVerifyEmailOtp, refreshAccessToken, forgetPassword, resetPassword, googleLogin, googleOneTapLogin };

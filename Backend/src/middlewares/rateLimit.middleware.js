@@ -13,7 +13,7 @@ const login = rateLimit({
     message: MESSAGES.TOO_MANY_LOGIN_REQUEST
 });
 
-const signup = rateLimit({
+const register = rateLimit({
     windowMs: RATE_LIMITTER.SIGNUP_WINDOW_MS,
     max: RATE_LIMITTER.SIGNUP_MAX,
     message: MESSAGES.TOO_MANY_SIGNUP_REQUEST
@@ -39,7 +39,7 @@ const forgetPass = rateLimit({
 
 module.exports = {
     login,
-    signup,
+    register,
     global,
     refreshToken,
     sendEmailOTP,

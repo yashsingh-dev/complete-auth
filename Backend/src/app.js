@@ -7,7 +7,7 @@ const helmet = require('helmet');
 
 const Limiter = require('./middlewares/rateLimit.middleware');
 const dbConnection = require('./db/connection');
-const authRoute = require('./routes/auth.route');
+const routes = require('./routes');
 
 const app = express();
 const csrfProtection = csrf({ cookie: true });
@@ -25,7 +25,7 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(csrfProtection);
 
-app.use('/api/auth', authRoute);
+app.use(routes);
 
 
 module.exports = app;
