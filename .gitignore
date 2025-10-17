@@ -1,6 +1,8 @@
 # Node modules (frontend + backend)
 **/node_modules/
 
+*.todo
+
 # Environment files
 **/.env
 
