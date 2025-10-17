@@ -29,4 +29,14 @@ export const Constants = {
     SESSION_EXPIRED: 'Session expired. Please log in again',
     PLEASE_LOGIN_WITH_GOOGLE: 'This account is registered with Google. Please use sign in with Google',
 
+    URI: {
+        HOME: '/',
+        LOGIN: '/login',
+        REGISTER: '/register',
+        FORGET_PASS: '/forgot',
+        RESET_PASS: '/reset/:token',
+        ASK_VERIFY_EMAIL: '/verification',
+        VERIFY_EMAIL: '/verification/:token',
+    }
+
 }

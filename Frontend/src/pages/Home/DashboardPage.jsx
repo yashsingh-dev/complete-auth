@@ -4,13 +4,14 @@ import { formatDate } from "../../utils/format";
 import { useAuthStore } from "../../store/useAuthStore";
 import { Link, useNavigate } from "react-router-dom";
 import { Loader } from "lucide-react";
+import { Constants } from "../../config/constants";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
   const { user, isLoading, logout } = useAuthStore();
 
   useEffect(() => {
-    navigate("/", { replace: true });
+    navigate(Constants.URI.HOME, { replace: true });
   }, []);
 
   const handleLogout = async () => {
@@ -68,7 +69,7 @@ const DashboardPage = () => {
             <p className="mb-4"></p>
           ) : (
             <Link
-              to="/verify-email"
+              to={Constants.URI.ASK_VERIFY_EMAIL}
               className="hover:underline cursor-pointer text-green-400 flex justify-end mt-2 mb-2 font-medium text-sm"
             >
               Complete Verification

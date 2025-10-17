@@ -10,7 +10,7 @@ const dbConnection = require('./db/connection');
 const routes = require('./routes');
 
 const app = express();
-const csrfProtection = csrf({ cookie: true });
+// const csrfProtection = csrf({ cookie: true });
 
 dbConnection();
 app.set('trust proxy', 1);
@@ -23,7 +23,7 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-app.use(csrfProtection);
+// app.use(csrfProtection);
 
 app.use(routes);
 

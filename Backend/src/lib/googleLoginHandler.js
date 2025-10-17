@@ -8,7 +8,7 @@ module.exports.googleLoginHandler = async (res, email, name) => {
 
     try {
         // Check if user already exists
-        let user = await userModel.findOne({ email });``
+        let user = await userModel.findOne({ email });
         if (!user) {
             // Create new user
             user = await userModel.create({

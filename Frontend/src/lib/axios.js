@@ -2,9 +2,10 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { refreshAccessToken } from '../store/useAuthStore';
 import { Constants } from "../config/constants";
+import { API } from "../config/api";
 
 export const axiosInstance = axios.create({
-    baseURL: import.meta.env.VITE_BACKEND_HOST,
+    baseURL: import.meta.env.VITE_BACKEND_HOST + API.API_PREFIX,
     withCredentials: true
 });
 

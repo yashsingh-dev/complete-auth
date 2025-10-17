@@ -1,9 +1,9 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
-import { Api } from "../config/api";
 import toast from "react-hot-toast";
 import { Constants } from "../config/constants";
 import { handleApiError } from "../utils/handleApiError";
+import { API } from "../config/api";
 
 export const useAuthStore = create((set, get) => ({
     user: null,
@@ -16,7 +16,7 @@ export const useAuthStore = create((set, get) => ({
     checkAuth: async () => {
         set({ isCheckingAuth: true });
         try {
-            const response = await axiosInstance.get(Api.CHECK_USER);
+            const response = await axiosInstance.get(API.AUTH.STATUS);
             console.log("CheckAuth: ", response);
             if (response.data.success) {
                 get().setUser(response.data.payload);
@@ -35,7 +35,7 @@ export const useAuthStore = create((set, get) => ({
     googleLogin: async (code) => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.post(Api.GOOGLE_LOGIN, { code });
+            const response = await axiosInstance.post(API.AUTH.GOOGLE, { code });
             console.log("Google Login: ", response);
             if (response.data.success) {
                 get().setUser(response.data.payload);
@@ -58,7 +58,7 @@ export const useAuthStore = create((set, get) => ({
     googleOneTapLogin: async (credentialResponse) => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.post(Api.GOOGLE_ONE_TAP_LOGIN, {
+            const response = await axiosInstance.post(API.AUTH.GOOGLE_ONETAP, {
                 token: credentialResponse.credential,
             });
             console.log("Google One Tap: ", response);
@@ -83,7 +83,7 @@ export const useAuthStore = create((set, get) => ({
     login: async (email, password, rememberMe) => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.post(Api.LOGIN, { email, password, rememberMe });
+            const response = await axiosInstance.post(API.AUTH.LOGIN, { email, password, rememberMe });
             console.log("Login: ", response);
             if (response.data.success) {
                 get().setUser(response.data.payload);
@@ -106,7 +106,7 @@ export const useAuthStore = create((set, get) => ({
     signup: async (fullname, email, password) => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.post(Api.SIGNUP, { fullname, email, password });
+            const response = await axiosInstance.post(API.AUTH.REGISTER, { fullname, email, password });
             console.log("Signup: ", response);
             if (response.data.success) {
                 get().setUser(response.data.payload);
@@ -129,7 +129,7 @@ export const useAuthStore = create((set, get) => ({
     forgetPass: async (email) => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.post(Api.FORGET_PASSWORD, { email });
+            const response = await axiosInstance.post(API.AUTH.PASSWORD_FORGOT, { email });
             console.log("Forget Pass : ", response);
             if (response.data.success) {
                 toast.success(Constants.EMAIL_SENT_SUCCESS);
@@ -150,7 +150,7 @@ export const useAuthStore = create((set, get) => ({
     resetPass: async (token, password) => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.post(Api.RESET_PASSWORD, { token, password });
+            const response = await axiosInstance.post(API.AUTH.PASSWORD_RESET, { token, password });
             console.log("Reset Pass : ", response);
             if (response.data.success) {
                 toast.success(Constants.PASSWORD_RESET_SUCCESS);
@@ -171,7 +171,7 @@ export const useAuthStore = create((set, get) => ({
     verifyEmail: async (token, code) => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.post(Api.VERIFY_EMAIL, { token, code });
+            const response = await axiosInstance.post(API.AUTH.EMAIL_VERIFY, { token, code });
             console.log("verifyEmail: ", response);
             if (response.data.success) {
                 get().setUser(response.data.payload);
@@ -193,7 +193,7 @@ export const useAuthStore = create((set, get) => ({
     sendVerifyEmailOTP: async () => {
         set({ loader: true });
         try {
-            const response = await axiosInstance.get(Api.SEND_EMAIL_OTP); ``
+            const response = await axiosInstance.get(API.AUTH.EMAIL_VERIFY); 
             console.log("sendVerifyEmailOTP: ", response);
             if (response.data.success) {
                 toast.success(Constants.OTP_SENT_SUCCESS);
@@ -214,7 +214,7 @@ export const useAuthStore = create((set, get) => ({
     logout: async () => {
         set({ isLoading: true });
         try {
-            let response = await axiosInstance.get(Api.LOGOUT);
+            let response = await axiosInstance.get(API.AUTH.LOGOUT);
             console.log("Logout: ", response);
             if (response.data.success) {
                 get().setUser(null);
@@ -232,7 +232,7 @@ export const useAuthStore = create((set, get) => ({
 
     refreshAccessToken: async () => {
         try {
-            const response = await axiosInstance.get(Api.REFRESH_TOKEN);
+            const response = await axiosInstance.get(API.AUTH.TOKEN_REFRESH);
             console.log("Refresh Token: ", response);
             if (response.data.success) {
                 const currentUser = get().user;
