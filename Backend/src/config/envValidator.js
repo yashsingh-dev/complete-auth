@@ -5,7 +5,7 @@ const logger = require('../config/logger.config');
 // TODO Production
 dotenv.config({
   example: '.env.example',
-  allowEmptyValues: false
+  allowEmptyValues: true
 });
 
 // Schema validation using Joi
