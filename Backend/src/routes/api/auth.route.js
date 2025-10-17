@@ -1,7 +1,7 @@
 const express = require('express');
 const Schema = require('../../schemas/auth.schema');
 const Limiter = require('../../middlewares/rateLimit.middleware');
-const { authenticate } = require('../../middlewares/auth.middleware');
+const Middleware = require('../../middlewares/auth.middleware');
 const router = express.Router();
 const Controller = require('../../controllers/auth.controller');
 const { API } = require('../../config/constants');
@@ -39,24 +39,24 @@ router.post(API.AUTH.PASSWORD_RESET,
 );
 
 router.get(API.AUTH.LOGOUT,
-    authenticate,
+    Middleware.authenticate,
     Controller.logout
 );
 
 router.get(API.AUTH.STATUS,
-    authenticate,
+    Middleware.authenticate,
     Controller.checkAuth
 );
 
 router.post(API.AUTH.EMAIL_VERIFY,
-    authenticate,
+    Middleware.authenticate,
     Schema.verifyEmail,
     Controller.verifyEmail
 );
 
 router.get(API.AUTH.EMAIL_VERIFY,
     Limiter.sendEmailOTP,
-    authenticate,
+    Middleware.authenticate,
     Controller.sendVerifyEmailOtp
 );
 

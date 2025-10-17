@@ -44,7 +44,7 @@ const LoginPage = () => {
       success
         ? user?.isVerified
           ? navigate("/")
-          : navigate("/verify-email")
+          : navigate(`${Constants.URI.ASK_VERIFY_EMAIL}`)
         : "";
     }
   };
@@ -157,7 +157,7 @@ const LoginPage = () => {
               </label>
             </div>
             <Link
-              to="/forgot-password"
+              to={Constants.URI.FORGET_PASS}
               className="text-sm text-green-400 hover:underline"
             >
               Forgot password?
@@ -187,7 +187,7 @@ const LoginPage = () => {
       <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
         <p className="text-sm text-gray-400">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-green-400 hover:underline">
+          <Link to={Constants.URI.REGISTER} className="text-green-400 hover:underline">
             Sign up
           </Link>
         </p>

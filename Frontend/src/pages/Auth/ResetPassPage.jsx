@@ -40,7 +40,7 @@ const ResetPassPage = () => {
 
     if (validation()) {
       const success = await resetPass(token, password);
-      success ? navigate("/login") : "";
+      success ? navigate(`${Constants.URI.LOGIN}`) : "";
     }
   };
 

@@ -14,6 +14,7 @@ import ResetPassPage from "./pages/Auth/ResetPassPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AuthenticatedUser from "./routes/AuthenticatedUser";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Constants } from "./config/constants";
 
 function App() {
   const {
@@ -44,7 +45,7 @@ function App() {
       <Background>
         <Routes>
           <Route
-            path="/login"
+            path={Constants.URI.LOGIN}
             element={
               <AuthenticatedUser>
                 <LoginPage />
@@ -52,7 +53,7 @@ function App() {
             }
           />
           <Route
-            path="/signup"
+            path={Constants.URI.REGISTER}
             element={
               <AuthenticatedUser>
                 <SignupPage />
@@ -60,7 +61,7 @@ function App() {
             }
           />
           <Route
-            path="/forgot-password"
+            path={Constants.URI.FORGET_PASS}
             element={
               <AuthenticatedUser>
                 <ForgetPassPage />
@@ -68,7 +69,7 @@ function App() {
             }
           />
           <Route
-            path="/reset-password/:token"
+            path={Constants.URI.RESET_PASS}
             element={
               <AuthenticatedUser>
                 <ResetPassPage />
@@ -76,7 +77,7 @@ function App() {
             }
           />
           <Route
-            path="/"
+            path={Constants.URI.HOME}
             element={
               <ProtectedRoute>
                 <DashboardPage />
@@ -84,19 +85,23 @@ function App() {
             }
           />
           <Route
-            path="/verify-email/:token"
+            path={Constants.URI.VERIFY_EMAIL}
             element={
               <ProtectedRoute>
-                {user?.isVerified ? <Navigate to="/" /> : <EmailVerifyPage />}
+                {user?.isVerified ? (
+                  <Navigate to={Constants.URI.HOME} />
+                ) : (
+                  <EmailVerifyPage />
+                )}
               </ProtectedRoute>
             }
           />
           <Route
-            path="/verify-email"
+            path={Constants.URI.ASK_VERIFY_EMAIL}
             element={
               <ProtectedRoute>
                 {user?.isVerified ? (
-                  <Navigate to="/" />
+                  <Navigate to={Constants.URI.HOME} />
                 ) : (
                   <AskEmailVerifyPage />
                 )}
@@ -104,7 +109,7 @@ function App() {
             }
           />
 
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to={Constants.URI.HOME} />} />
         </Routes>
 
         <Toaster />
