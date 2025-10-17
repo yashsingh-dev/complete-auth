@@ -1,6 +1,5 @@
 const express = require('express');
 require('dotenv').config();
-require('./config/envValidator');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const csrf = require('csurf');
