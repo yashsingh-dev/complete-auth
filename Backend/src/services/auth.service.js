@@ -93,9 +93,9 @@ const logout = async (accessToken, refreshToken) => {
 
     // Check if refreshToken is valid.
     const secret_key = process.env.JWT_REFRESH_KEY || 'default-key';
-    const decoded = await jwt.verify(refreshToken, secret_key);
+    const decoded = jwt.verify(refreshToken, secret_key);
 
-    // **CRITICAL STEP:** Check if the user from the token exists
+    // Check if the user from the token exists
     const user = await userModel.findById(decoded._id);
     if (!user) {
         const error = new Error(MESSAGES.USER_NOT_FOUND);
@@ -110,6 +110,22 @@ const logout = async (accessToken, refreshToken) => {
     // Create refreshToken hash delete from refreshToken collection
     const hashRefreshToken = secureHash(refreshToken);
     await refreshTokenModel.findOneAndDelete({ token: hashRefreshToken });
+
+};
+
+const logoutAll = async (refreshToken) => {
+
+    // Check if refreshToken is valid.
+    const secret_key = process.env.JWT_REFRESH_KEY || 'default-key';
+    const decoded = jwt.verify(refreshToken, secret_key);
+
+    await Promise.all([
+        // Delete all refresh tokens for the user
+        refreshTokenModel.deleteMany({ userId: decoded._id }),
+
+        // Increment the user's tokenVersion
+        userModel.updateOne({ _id: decoded._id }, { $inc: { tokenVersion: 1 } })
+    ]);
 
 };
 
@@ -188,7 +204,7 @@ const forgetPassword = async (email) => {
 
     // Generate a random token
     const resetToken = crypto.randomBytes(20).toString('hex');
-    const resetTokenExpiresAt = FORGET_PASS.EXPIRY_MS;
+    const resetTokenExpiresAt = Date.now() + FORGET_PASS.EXPIRY_MS;
 
     // Save in user database
     user.resetPasswordToken = resetToken;
@@ -242,12 +258,6 @@ const resetPassword = async (token, password) => {
 
 const refreshAccessToken = async (oldRefreshToken) => {
 
-    if (!oldRefreshToken) {
-        const error = new Error(MESSAGES.REFRESH_TOKEN_MISSING);
-        error.statusCode = 401;
-        throw error;
-    }
-
     // Create refreshToken hash and check if it exists in DB
     const hashRefreshToken = secureHash(oldRefreshToken);
     const tokenDoc = await refreshTokenModel.findOne({ token: hashRefreshToken });
@@ -259,7 +269,7 @@ const refreshAccessToken = async (oldRefreshToken) => {
 
     // Verify refresh token and expiry using its secret key
     const secret_key = process.env.JWT_REFRESH_KEY || 'default-key';
-    const decoded = await jwt.verify(oldRefreshToken, secret_key);
+    const decoded = jwt.verify(oldRefreshToken, secret_key);
 
     // Check For Remember Me
     const createAt = decoded.iat;
@@ -285,7 +295,7 @@ const refreshAccessToken = async (oldRefreshToken) => {
     let newAccessToken = await generateAccessToken(decoded._id, user.tokenVersion);
     let newRefreshToken = await generateRefreshToken(decoded._id, refreshTokenExpiry);
 
-    return { newAccessToken, newRefreshToken, expiryTime }; x
+    return { newAccessToken, newRefreshToken, expiryTime };
 
 };
 
@@ -294,6 +304,7 @@ module.exports = {
     register,
     googleLogin,
     logout,
+    logoutAll,
     sendVerifyEmailOtp,
     verifyEmail,
     forgetPassword,

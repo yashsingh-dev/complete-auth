@@ -1,7 +1,7 @@
 const refreshTokenModel = require('../models/refreshToken.model');
 const logger = require('../config/logger.config');
 const { secureHash } = require('../utils/crypto.utils');
-const { setAuthCookie, clearCookie } = require('../utils/setCookies.utils');
+const { setAuthTokens, clearToken, clearTokenCookies } = require('../utils/setCookies.utils');
 const Service = require('../services/auth.service');
 const { MESSAGES, COOKIES, TOKEN_EXPIRY, OTP, FORGET_PASS } = require('../config/constants');
 const { oauth2client } = require('../config/google.config');
@@ -19,8 +19,8 @@ const login = async (req, res) => {
         const refreshTokenCookieAge = rememberMe ? COOKIES.REFRESH_TOKEN_AGE_MS : COOKIES.REFRESH_TOKEN_SHORT_AGE_MS;
 
         // Set Cookie
-        await setAuthCookie(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
-        await setAuthCookie(res, COOKIES.REFRESH_TOKEN, refreshToken, refreshTokenCookieAge);
+        await setAuthTokens(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.REFRESH_TOKEN, refreshToken, refreshTokenCookieAge);
 
         logger.info(`User logged in: ${user.email}`);
 
@@ -49,11 +49,11 @@ const register = async (req, res) => {
         let { fullname, email, password } = req.body;
 
         const result = await Service.register(fullname, email, password);
-        const { newUser, accessToken, refreshToken } = result;
+        const { new_user, accessToken, refreshToken } = result;
 
         // Set Cookie
-        await setAuthCookie(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
-        await setAuthCookie(res, COOKIES.REFRESH_TOKEN, refreshToken, COOKIES.REFRESH_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.REFRESH_TOKEN, refreshToken, COOKIES.REFRESH_TOKEN_AGE_MS);
 
         logger.info(`User Created : ${new_user.email}`);
 
@@ -62,7 +62,7 @@ const register = async (req, res) => {
             success: true,
             message: MESSAGES.REGISTER_SUCCESS,
             payload: {
-                ...newUser.toObject(),
+                ...new_user.toObject(),
                 password: undefined,
                 tokenExp: Date.now() + TOKEN_EXPIRY.ACCESS_TOKEN_MS,
             }
@@ -90,11 +90,11 @@ const googleLogin = async (req, res) => {
         const { data: googleUser } = await oauth2.userinfo.get();
         const { email, name } = googleUser;
 
-        const { accessToken, refreshToken, user } = Service.googleLogin(email, name);
+        const { accessToken, refreshToken, user } = await Service.googleLogin(email, name);
 
         // Set Cookie
-        await setAuthCookie(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
-        await setAuthCookie(res, COOKIES.REFRESH_TOKEN, refreshToken, COOKIES.REFRESH_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.REFRESH_TOKEN, refreshToken, COOKIES.REFRESH_TOKEN_AGE_MS);
 
         logger.info(`Google logged in : ${user.email}`);
 
@@ -109,6 +109,7 @@ const googleLogin = async (req, res) => {
     }
     catch (error) {
         logger.error("Google Login Error: ", error);
+        clearTokenCookies(res);
         return res.status(error.statusCode || 500).json({
             success: false,
             error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
@@ -128,13 +129,13 @@ const googleOneTapLogin = async (req, res) => {
         const payload = ticket.getPayload();
         const { email, name } = payload;
 
-        const { accessToken, refreshToken, user } = Service.googleLogin(email, name);
+        const { accessToken, refreshToken, user } = await Service.googleLogin(email, name);
 
         // Set Cookie
-        await setAuthCookie(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
-        await setAuthCookie(res, COOKIES.REFRESH_TOKEN, refreshToken, COOKIES.REFRESH_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.REFRESH_TOKEN, refreshToken, COOKIES.REFRESH_TOKEN_AGE_MS);
 
-        logger.info(`Google logged in : ${user.email}`);
+        logger.info(`Google One Tap logged in : ${user.email}`);
 
         return res.status(200).json({
             success: true,
@@ -147,6 +148,7 @@ const googleOneTapLogin = async (req, res) => {
     }
     catch (error) {
         logger.error("Google One Tap Login Error: ", error);
+        clearTokenCookies(res);
         return res.status(error.statusCode || 500).json({
             success: false,
             error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
@@ -179,11 +181,17 @@ const logout = async (req, res) => {
         const accessToken = req.cookies.accessToken;
         const refreshToken = req.cookies.refreshToken;
 
+        // Check Refresh Token
+        if (!refreshToken || refreshToken === 'undefined') {
+            // Logout is done at the end
+            clearTokenCookies(res);
+            return res.status(200).json({ success: true, message: MESSAGES.LOGOUT_SUCCESS });
+        }
+
         await Service.logout(accessToken, refreshToken);
 
         // Clear Cookie
-        clearCookie(res, COOKIES.ACCESS_TOKEN);
-        clearCookie(res, COOKIES.REFRESH_TOKEN);
+        clearTokenCookies(res);
 
         logger.info(`User logged out`);
 
@@ -196,8 +204,40 @@ const logout = async (req, res) => {
         logger.error("Logout Error: ", error);
 
         // Always clear cookies on any logout error to prevent a bad state
-        clearCookie(res, COOKIES.ACCESS_TOKEN);
-        clearCookie(res, COOKIES.REFRESH_TOKEN);
+        clearTokenCookies(res);
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
+        });
+    }
+}
+
+const logoutAll = async (req, res) => {
+    try {
+        const refreshToken = req.cookies.refreshToken;
+
+        // Check Refresh Token
+        if (!refreshToken || refreshToken === 'undefined') {
+            return res.status(401).json({ success: false, message: MESSAGES.REFRESH_TOKEN_MISSING });
+        }
+
+        await Service.logoutAll(refreshToken);
+
+        // Clear Cookie
+        clearTokenCookies(res);
+
+        logger.info(`All User logged out`);
+
+        return res.status(200).json({
+            success: true,
+            message: MESSAGES.LOGOUT_SUCCESS
+        });
+    }
+    catch (error) {
+        logger.error("All Logout Error: ", error);
+
+        // Always clear cookies on any logout error to prevent a bad state
+        clearTokenCookies(res);
         return res.status(error.statusCode || 500).json({
             success: false,
             error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
@@ -284,18 +324,22 @@ const resetPassword = async (req, res) => {
 }
 
 const refreshAccessToken = async (req, res) => {
+    const oldRefreshToken = req.cookies.refreshToken;
     try {
 
-        // Check if token exists in cookie
-        const oldRefreshToken = req.cookies.refreshToken;
+        // Check if refresh token exists in cookie
+        if (!oldRefreshToken || oldRefreshToken === 'undefined') {
+            clearToken(res, COOKIES.REFRESH_TOKEN);
+            return res.status(401).json({ success: false, message: MESSAGES.REFRESH_TOKEN_MISSING });
+        }
 
         const { newAccessToken, newRefreshToken, expiryTime } = await Service.refreshAccessToken(oldRefreshToken);
 
         let refreshTokenCookieAge = (expiryTime > 1) ? COOKIES.REFRESH_TOKEN_AGE_MS : COOKIES.REFRESH_TOKEN_SHORT_AGE_MS;
 
         // Set Cookie
-        await setAuthCookie(res, COOKIES.ACCESS_TOKEN, newAccessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
-        await setAuthCookie(res, COOKIES.REFRESH_TOKEN, newRefreshToken, refreshTokenCookieAge);
+        await setAuthTokens(res, COOKIES.ACCESS_TOKEN, newAccessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
+        await setAuthTokens(res, COOKIES.REFRESH_TOKEN, newRefreshToken, refreshTokenCookieAge);
 
         return res.status(200).json({
             success: true,
@@ -309,12 +353,13 @@ const refreshAccessToken = async (req, res) => {
         logger.error("Refresh Token Error: ", error);
 
         //Remove this expired token hash from DB
-        const hashRefreshToken = secureHash(oldRefreshToken);
-        await refreshTokenModel.findOneAndDelete({ token: hashRefreshToken });
+        if (oldRefreshToken) {
+            const hashRefreshToken = secureHash(oldRefreshToken);
+            await refreshTokenModel.findOneAndDelete({ token: hashRefreshToken });
+        }
 
         // Clear Cookie
-        clearCookie(res, COOKIES.ACCESS_TOKEN);
-        clearCookie(res, COOKIES.REFRESH_TOKEN);
+        clearTokenCookies(res);
 
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({ success: false, error: MESSAGES.SESSION_EXPIRE });
@@ -327,4 +372,4 @@ const refreshAccessToken = async (req, res) => {
 }
 
 
-module.exports = { login, register, checkAuth, logout, verifyEmail, sendVerifyEmailOtp, refreshAccessToken, forgetPassword, resetPassword, googleLogin, googleOneTapLogin };
+module.exports = { login, register, checkAuth, logout, logoutAll, verifyEmail, sendVerifyEmailOtp, refreshAccessToken, forgetPassword, resetPassword, googleLogin, googleOneTapLogin };

@@ -7,7 +7,7 @@ const logger = require('../config/logger.config');
 module.exports.generateAccessToken = async function (userId, tokenVersion) {
     const secret_key = process.env.JWT_ACCESS_KEY || 'default-key';
     try {
-        let access_token = await jwt.sign({ _id: userId, tokenVersion }, secret_key, {
+        let access_token = jwt.sign({ _id: userId, tokenVersion }, secret_key, {
             expiresIn: TOKEN_EXPIRY.ACCESS_TOKEN
         });
 
@@ -21,7 +21,7 @@ module.exports.generateAccessToken = async function (userId, tokenVersion) {
 module.exports.generateRefreshToken = async function (userId, expiry = TOKEN_EXPIRY.REFRESH_TOKEN) {
     const secret_key = process.env.JWT_REFRESH_KEY || 'default-key';
     try {
-        let refresh_token = await jwt.sign({ _id: userId }, secret_key, {
+        let refresh_token = jwt.sign({ _id: userId }, secret_key, {
             expiresIn: expiry
         });
 

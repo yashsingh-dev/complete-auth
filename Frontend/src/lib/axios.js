@@ -25,8 +25,8 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         if (error.response) {
             const { status, data } = error.response;
-            console.log("Status: ", status);
-            console.log("Data: ", data.payload);
+            console.log("Axios Status: ", status);
+            console.log("Axios Response: ", data);
             if (
                 status === 401 &&
                 (data.message === 'token_expired_please_login_again' ||
@@ -37,7 +37,6 @@ axiosInstance.interceptors.response.use(
                     return axiosInstance(error.config);
                 } catch (refreshError) {
                     console.log('Refresh token failed', refreshError);
-                    toast.error(Constants.SESSION_EXPIRED);
                     return Promise.reject(refreshError);
                 }
             }

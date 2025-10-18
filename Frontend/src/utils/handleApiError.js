@@ -7,8 +7,8 @@ export const handleApiError = (name, error, options = {}) => {
 
     if (error.response) {
         const { status, data } = error.response;
-        console.log("Status: ", status);
-        console.log("Data: ", data);
+        console.log("ApiError Status: ", status);
+        console.log("ApiError Response: ", error.response);
         if (status === 400) {
             if (data.error) {
                 (error.response.data?.error[0].schemaPath === '#/properties/email/format') ?
@@ -34,7 +34,7 @@ export const handleApiError = (name, error, options = {}) => {
             }
             else if (data.error === 'refresh_token_missing') {
                 setUser(null);
-                // Redirect to login page
+                // Redirected to login page
             }
             else if (data.error === 'access_token_missing') {
                 // Axios interceptor will take care
@@ -50,7 +50,7 @@ export const handleApiError = (name, error, options = {}) => {
             else if (data.error === 'user_not_found') {
                 toast.error(Constants.SOMETHING_WENT_WRONG);
                 setUser(null);
-                // Something happened to DB or refresh token
+                // Redirected to login page
             }
         }
         else if (status === 410) {
@@ -70,14 +70,14 @@ export const handleApiError = (name, error, options = {}) => {
         else if (status === 403) {
             if (data.error === 'invalid_refresh_token') {
                 setUser(null);
-                // Redirect to login page
+                // Redirected to login page
             }
             else if (data.error === 'invalid_token') {
                 toast.error(Constants.INVALID_LINK);
             }
             else if (data.error === 'token_has_been_revoked') {
                 setUser(null);
-                // Hacker Attack
+                // Hacker Attack may be
             }
         }
         else if (status === 429) {  
