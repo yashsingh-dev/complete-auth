@@ -230,6 +230,25 @@ export const useAuthStore = create((set, get) => ({
         }
     },
 
+    logoutAll: async () => {
+        set({ isLoading: true });
+        try {
+            let response = await axiosInstance.get(API.AUTH.LOGOUT_ALL);
+            console.log("Logout All: ", response);
+            if (response.data.success) {
+                get().setUser(null);
+                toast.success(Constants.LOGOUT_SUCCESS);
+            }
+            else {
+                toast.error(Constants.SOMETHING_WENT_WRONG);
+            }
+        } catch (error) {
+            handleApiError("Logout All", error, { setUser: get().setUser });
+        } finally {
+            set({ isLoading: false });
+        }
+    },
+
     refreshAccessToken: async () => {
         try {
             const response = await axiosInstance.get(API.AUTH.TOKEN_REFRESH);

@@ -4,6 +4,7 @@ export const Constants = {
     INVALID_EMAIL: 'Invalid Email Format',
     PASS_REQUIRED: 'Password Required',
     PASS_NOT_MATCH: 'Password Not Match',
+    LOGIN_AGAIN: 'Please Login Again',
     CHOOSE_STRONG_PASS: 'Choose Strong Password',
     MIN_LENGTH_PASS: 'Password must be at least 6 characters long',
     MIN_LENGTH_NAME: 'Name must be at least 3 characters long',

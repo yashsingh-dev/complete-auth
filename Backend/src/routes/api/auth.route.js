@@ -43,6 +43,11 @@ router.get(API.AUTH.LOGOUT,
     Controller.logout
 );
 
+router.get(API.AUTH.LOGOUT_ALL,
+    Middleware.authenticate,
+    Controller.logoutAll
+);
+
 router.get(API.AUTH.STATUS,
     Middleware.authenticate,
     Controller.checkAuth

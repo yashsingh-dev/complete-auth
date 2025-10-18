@@ -6,6 +6,7 @@ export const API = {
         LOGIN: '/auth/login',
         REGISTER: '/auth/register',
         LOGOUT: '/auth/logout',
+        LOGOUT_ALL: '/auth/logout-all',
         PASSWORD_FORGOT: '/auth/forgot',
         PASSWORD_RESET: '/auth/reset/:token',
         TOKEN_REFRESH: '/auth/token/refresh',

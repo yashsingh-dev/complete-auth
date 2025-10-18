@@ -12,6 +12,7 @@ module.exports = {
             LOGIN: '/login',
             REGISTER: '/register',
             LOGOUT: '/logout',
+            LOGOUT_ALL: '/logout-all',
             PASSWORD_FORGOT: '/forgot',
             PASSWORD_RESET: '/reset/:token',
             TOKEN_REFRESH: '/token/refresh',
@@ -42,11 +43,11 @@ module.exports = {
         EXPIRY_MODEL: 15 * 60
     },
     FORGET_PASS: {
-        EXPIRY_MS: Date.now() + 15 * 60 * 1000,
+        EXPIRY_MS: 15 * 60 * 1000,
     },
     RATE_LIMITTER: {
         GLOBAL_WINDOW_MS: 10 * 60 * 1000,
-        GLOBAL_MAX: 150,
+        GLOBAL_MAX: 200,
         LOGIN_WINDOW_MS: 5 * 60 * 1000,
         LOGIN_MAX: 10,
         SIGNUP_WINDOW_MS: 5 * 60 * 1000,

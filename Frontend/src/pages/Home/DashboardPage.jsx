@@ -8,7 +8,7 @@ import { Constants } from "../../config/constants";
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const { user, isLoading, logout } = useAuthStore();
+  const { user, isLoading, logout, logoutAll } = useAuthStore();
 
   useEffect(() => {
     navigate(Constants.URI.HOME, { replace: true });
@@ -16,6 +16,10 @@ const DashboardPage = () => {
 
   const handleLogout = async () => {
     await logout();
+  };
+
+  const handleAllLogout = async () => {
+    await logoutAll();
   };
 
   return (
@@ -96,6 +100,21 @@ const DashboardPage = () => {
             <Loader className="w-6 h-6 animate-spin mx-auto" />
           ) : (
             "Logout"
+          )}
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={handleAllLogout}
+          disabled={isLoading}
+          className="mt-1 w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white 
+				font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700
+				 focus:outline-none cursor-pointer"
+        >
+          {isLoading ? (
+            <Loader className="w-6 h-6 animate-spin mx-auto" />
+          ) : (
+            "Logout All Device"
           )}
         </motion.button>
       </motion.div>
