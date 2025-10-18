@@ -8,7 +8,7 @@ const { secureHash } = require('../utils/crypto.utils');
 
 module.exports.authenticate = async (req, res, next) => {
     try {
-        // First Check Refresh Token
+        // Check Refresh Token
         const refreshToken = req.cookies.refreshToken;
         if (!refreshToken) return res.status(401).json({ success: false, message: MESSAGES.REFRESH_TOKEN_MISSING });
 
@@ -28,7 +28,7 @@ module.exports.authenticate = async (req, res, next) => {
             return res.status(403).json({ success: false, message: MESSAGES.TOKEN_REVOKE });
         }
 
-        // Verify JWT Signature and expiry 
+        // Verify JWT Signature and expiry
         const secret_key = process.env.JWT_ACCESS_KEY || 'default-key';
         let decoded = await jwt.verify(accessToken, secret_key);
         let user_data = await userModel.findById(decoded._id);
