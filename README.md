@@ -27,6 +27,7 @@ A full-featured authentication system built with the MERN stack, designed to fol
 - ✅ Tokens stored securely in HTTP-only cookies
 - ✅ Auto Refresh Token Rotation(RTR) mechanism on protected routes
 - ✅ Logout (Single Device)
+- ✅ Logout From All Device
 - ✅ Sign in with google, One Tap Google Login, Automataic Google Login
 - ✅ Email Verification via OTP
 - ✅ Clean folder structure following separation of concerns
