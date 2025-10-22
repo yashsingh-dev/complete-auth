@@ -49,17 +49,23 @@ const LoginPage = () => {
     }
   };
 
-  const responseGoogle = async (authResult) => {
+  const handleGoogleSuccess = async (authResult) => {
     try {
       await googleLogin(authResult.code);
     } catch (error) {
-      console.log("Error while requesting google code: ", error);
+      console.log("Error while sending auth code to backend: ", error);
+      toast.error("Login failed. Please try again");
     }
   };
 
+  const handleGoogleError = (error) => {
+    toast.error("Google login was cancelled")
+    console.error("Google login process failed: ", error);
+  };
+
   const handleGoogleLogin = useGoogleLogin({
-    onSuccess: responseGoogle,
-    onError: responseGoogle,
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleError,
     flow: "auth-code",
   });
 
@@ -187,7 +193,10 @@ const LoginPage = () => {
       <div className="px-8 py-4 bg-gray-900 bg-opacity-50 flex justify-center">
         <p className="text-sm text-gray-400">
           Don't have an account?{" "}
-          <Link to={Constants.URI.REGISTER} className="text-green-400 hover:underline">
+          <Link
+            to={Constants.URI.REGISTER}
+            className="text-green-400 hover:underline"
+          >
             Sign up
           </Link>
         </p>
