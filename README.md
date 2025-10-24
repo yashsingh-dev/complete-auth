@@ -33,7 +33,6 @@ A full-featured authentication system built with the MERN stack, designed to fol
 - ✅ Clean folder structure following separation of concerns
 - ✅ Input validation & sanitization
 - ✅ Centralized Error handling
-- ✅ Project image on Docker **(https://hub.docker.com/u/yashsingh330)**
 - ✅ Industry Level Code Base
 - ✅ Apply schemas check on every request in Backend
 - ✅ Secure Database with encrypted data
