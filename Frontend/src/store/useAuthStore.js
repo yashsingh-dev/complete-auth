@@ -233,7 +233,7 @@ export const useAuthStore = create((set, get) => ({
     },
 
     logoutAll: async () => {
-        set({ isLogoutLoading: true });
+        set({ isLogoutAllLoading: true });
         try {
             let response = await axiosInstance.get(API.AUTH.LOGOUT_ALL);
             console.log("Logout All: ", response);
@@ -247,7 +247,7 @@ export const useAuthStore = create((set, get) => ({
         } catch (error) {
             handleApiError("Logout All", error, { setUser: get().setUser });
         } finally {
-            set({ isLogoutLoading: false });
+            set({ isLogoutAllLoading: false });
         }
     },
 
