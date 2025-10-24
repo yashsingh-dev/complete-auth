@@ -1,0 +1,11 @@
+node_modules
+logs
+npm-debug.log
+Dockerfile
+.dockerignore
+.git
+.gitignore
+.env
+.env.example
+project.todo
+refresh-token-tracking.md
