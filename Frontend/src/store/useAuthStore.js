@@ -10,6 +10,8 @@ export const useAuthStore = create((set, get) => ({
     setUser: (userData) => set({ user: userData }),
     loader: false,
     isLoading: false,
+    isLogoutLoading: false,
+    isLogoutAllLoading: false,
     isCheckingAuth: true,
     expiryIntervalRef: null,
 
@@ -212,7 +214,7 @@ export const useAuthStore = create((set, get) => ({
     },
 
     logout: async () => {
-        set({ isLoading: true });
+        set({ isLogoutLoading: true });
         try {
             let response = await axiosInstance.get(API.AUTH.LOGOUT);
             console.log("Logout: ", response);
@@ -226,12 +228,12 @@ export const useAuthStore = create((set, get) => ({
         } catch (error) {
             handleApiError("Logout", error, { setUser: get().setUser });
         } finally {
-            set({ isLoading: false });
+            set({ isLogoutLoading: false });
         }
     },
 
     logoutAll: async () => {
-        set({ isLoading: true });
+        set({ isLogoutLoading: true });
         try {
             let response = await axiosInstance.get(API.AUTH.LOGOUT_ALL);
             console.log("Logout All: ", response);
@@ -245,7 +247,7 @@ export const useAuthStore = create((set, get) => ({
         } catch (error) {
             handleApiError("Logout All", error, { setUser: get().setUser });
         } finally {
-            set({ isLoading: false });
+            set({ isLogoutLoading: false });
         }
     },
 
