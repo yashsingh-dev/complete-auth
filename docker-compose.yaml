@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - auth_network
+    restart: unless-stopped
+
+  backend:
+    image: auth-backend:latest
+    build: ./Backend
+    container_name: backend
+    ports:
+      - "8000:3000"
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      MONGO_URI: ${MONGO_URI}
+      CRYPTO_TOKEN_KEY: ${CRYPTO_TOKEN_KEY}
+      JWT_ACCESS_KEY: ${JWT_ACCESS_KEY}
+      JWT_REFRESH_KEY: ${JWT_REFRESH_KEY}
+      EMAIL_HOST: ${EMAIL_HOST}
+      EMAIL_PORT: ${EMAIL_PORT}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_ADDRESS: ${EMAIL_ADDRESS}
+      EMAIL_PASS: ${EMAIL_PASS}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      FACEBOOK_APP_ID: ${FACEBOOK_APP_ID}
+      FACEBOOK_APP_SECRET: ${FACEBOOK_APP_SECRET}
+      CLIENT_URL_DEV: ${CLIENT_URL_DEV}
+      SERVER_URL_DEV: ${SERVER_URL_DEV}
+      PORT: ${PORT}
+    depends_on:
+      - mongo
+    networks:
+      - auth_network
+    restart: unless-stopped
+
+  frontend:
+    image: auth-frontend:latest
+    build:
+      context: ./Frontend 
+      args: 
+        VITE_BACKEND_HOST: http://localhost:8000
+        VITE_APP_ENV: ${VITE_APP_ENV}
+        VITE_GOOGLE_CLIENT_KEY: ${VITE_GOOGLE_CLIENT_KEY}
+    container_name: frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - auth_network
+    restart: unless-stopped
+
+volumes:
+  mongo-data:
+
+networks:
+  auth_network:
+    driver: bridge
