@@ -62,17 +62,16 @@ cd Backend
 npm install
 ```
 
-Don't forget to setup .env file from .env.sample
+Don't forget to setup .env file from .env.example
 
 ### 3. Frontend Setup
 
 ```
 cd Frontend
 npm install
-
-Create a .env file
-VITE_BACKEND_URL=http://localhost:5000
 ```
+
+Don't forget to setup .env file from .env.example
 
 ### 4. Run the App
 
@@ -80,7 +79,7 @@ VITE_BACKEND_URL=http://localhost:5000
 
 ```
 cd Backend
-npx nodemon
+npm run dev
 ```
 
 #### Terminal 2 (Frontend)
