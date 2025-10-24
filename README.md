@@ -46,7 +46,7 @@ A full-featured authentication system built with the MERN stack, designed to fol
 
 ---
 
-## 🧪 Setup Instructions
+## 🧪 Locally Setup Instructions
 
 ### 1. Clone the Repository
 
@@ -87,4 +87,16 @@ npm run dev
 ```
 cd Frontend
 npm run dev
+```
+---
+
+## 🧪 Docker SetUp Instructions
+
+### 1. .env file setup
+
+Create a .env file in root dir complete-auth/.env and set varaibles from .env.example
+
+### 1. Start the containers
+```
+docker-compose -p <project-name> up --build -d
 ```
