@@ -4,7 +4,7 @@ const logger = require('../config/logger.config');
 const commonCookieOptions = {
     httpOnly: true,
     // secure: (process.env.NODE_ENV || 'development') === 'production',
-    secure: 'true',
+    secure: true,
     sameSite: 'None',
     path: '/',
     domain: process.env.COOKIE_DOMAIN || undefined
