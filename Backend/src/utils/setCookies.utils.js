@@ -1,4 +1,5 @@
 const { COOKIES } = require("../config/constants");
+const logger = require('../config/logger.config');
 
 const commonCookieOptions = {
     httpOnly: true,
@@ -10,6 +11,7 @@ const commonCookieOptions = {
 
 module.exports.setAuthTokens = async function (res, cookieName, token, maxAge) {
 
+    logger.info(`Setting cookie ${cookieName} with options:`, { ...commonCookieOptions, maxAge: maxAge });
     res.cookie(cookieName, token, {
         ...commonCookieOptions,
         maxAge: maxAge
