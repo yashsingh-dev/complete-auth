@@ -11,7 +11,8 @@ const commonCookieOptions = {
 
 module.exports.setAuthTokens = async function (res, cookieName, token, maxAge) {
 
-    logger.info(`Setting cookie ${cookieName} with options:`, { ...commonCookieOptions, maxAge: maxAge });
+    const finalOptions = { ...commonCookieOptions, maxAge: maxAge };
+    logger.info(`Setting cookie ${cookieName} with options: ${JSON.stringify(finalOptions)}`);
     res.cookie(cookieName, token, {
         ...commonCookieOptions,
         maxAge: maxAge
