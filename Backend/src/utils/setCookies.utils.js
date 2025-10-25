@@ -6,8 +6,7 @@ const commonCookieOptions = {
     // secure: (process.env.NODE_ENV || 'development') === 'production',
     secure: true,
     sameSite: 'None',
-    path: '/',
-    domain: process.env.COOKIE_DOMAIN || undefined
+    path: '/'
 };
 
 module.exports.setAuthTokens = async function (res, cookieName, token, maxAge) {
