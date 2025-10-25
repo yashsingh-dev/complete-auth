@@ -3,16 +3,13 @@ const logger = require('../config/logger.config');
 
 const commonCookieOptions = {
     httpOnly: true,
-    // secure: (process.env.NODE_ENV || 'development') === 'production',
-    secure: true,
+    secure: (process.env.NODE_ENV || 'development') === 'production',
     sameSite: 'None',
     path: '/'
 };
 
 module.exports.setAuthTokens = async function (res, cookieName, token, maxAge) {
 
-    const finalOptions = { ...commonCookieOptions, maxAge: maxAge };
-    logger.info(`Setting cookie ${cookieName} with options: ${JSON.stringify(finalOptions)}`);
     res.cookie(cookieName, token, {
         ...commonCookieOptions,
         maxAge: maxAge
