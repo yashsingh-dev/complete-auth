@@ -5,7 +5,7 @@ const { VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE, PASSWORD_RESET_REQU
 module.exports.sendVerificationEmail = async (email, otp) => {
 
     try {
-        await transport.sendMail({
+        transport.sendMail({
             from: sender,
             to: email,
             subject: "Verify your email",
@@ -22,7 +22,7 @@ module.exports.sendVerificationEmail = async (email, otp) => {
 module.exports.sendWelcomeEmail = async (email, name) => {
 
     try {
-        await transport.sendMail({
+        transport.sendMail({
             from: sender,
             to: [email],
             subject: `Hey ${name}! Welcome to Cortex`,
@@ -39,7 +39,7 @@ module.exports.sendWelcomeEmail = async (email, name) => {
 module.exports.sendPasswordResetEmail = async (email, resetURL) => {
 
     try {
-        await transport.sendMail({
+        transport.sendMail({
             from: sender,
             to: [email],
             subject: 'Reset your password',
@@ -56,7 +56,7 @@ module.exports.sendPasswordResetEmail = async (email, resetURL) => {
 module.exports.sendResetSuccessEmail = async (email) => {
 
     try {
-        await transport.sendMail({
+        transport.sendMail({
             from: sender,
             to: [email],
             subject: 'Password Reset Successfull',

@@ -246,6 +246,15 @@ const logoutAll = async (req, res) => {
 
 const sendVerifyEmailOtp = async (req, res) => {
     try {
+
+        //Check if user is verified
+        if (req.user.isVerified) {
+            return res.status(200).json({
+                success: false,
+                error: MESSAGES.USER_ALREADY_VERIFIED
+            });
+        }
+
         const { token } = await Service.sendVerifyEmailOtp(req.user.email, req.user._id);
 
         return res.status(200).json({

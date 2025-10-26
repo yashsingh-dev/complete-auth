@@ -90,6 +90,7 @@ module.exports = {
         INVALID_TOKEN: "invalid_token",
         LINK_EXPIRE: "link_expired",
         PASSWORD_RESET: "password_reset_successfully",
+        USER_ALREADY_VERIFIED: "user_already_verified",
         OTP_VERIFIED: "email_verification_successfull",
         TOKEN_EXPIRE: "token_expired_please_login_again",
         PASS_RESET_LINK: "Password_reset_link_sent_to_your_email",
