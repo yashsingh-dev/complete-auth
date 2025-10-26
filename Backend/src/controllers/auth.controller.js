@@ -16,9 +16,8 @@ const login = async (req, res) => {
         const result = await Service.login(email, password, rememberMe);
         const { user, accessToken, refreshToken } = result;
 
-        const refreshTokenCookieAge = rememberMe ? COOKIES.REFRESH_TOKEN_AGE_MS : COOKIES.REFRESH_TOKEN_SHORT_AGE_MS;
-
         // Set Cookie
+        const refreshTokenCookieAge = rememberMe ? COOKIES.REFRESH_TOKEN_AGE_MS : COOKIES.REFRESH_TOKEN_SHORT_AGE_MS;
         await setAuthTokens(res, COOKIES.ACCESS_TOKEN, accessToken, COOKIES.ACCESS_TOKEN_AGE_MS);
         await setAuthTokens(res, COOKIES.REFRESH_TOKEN, refreshToken, refreshTokenCookieAge);
 
