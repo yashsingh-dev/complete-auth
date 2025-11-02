@@ -11,30 +11,25 @@ const { generateAccessToken, generateRefreshToken } = require('../utils/setJwtTo
 const { getOtp } = require('../utils/otp.utils');
 const { MESSAGES, TOKEN_EXPIRY, OTP, FORGET_PASS } = require('../config/constants');
 const { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } = require('../lib/email');
+const ApiError = require('../utils/ApiError');
 
 const login = async (email, password, rememberMe) => {
 
     // Find User
     const user = await userModel.findOne({ email }).select('+password');
     if (!user) {
-        const error = new Error(MESSAGES.INVALID_EMAIL_PASSWORD);
-        error.statusCode = 401;
-        throw error;
+        throw new ApiError(401, MESSAGES.INVALID_EMAIL_PASSWORD);
     }
 
     // Check for google account
     if (user.isGoogleAccount) {
-        const error = new Error(MESSAGES.LOGIN_WITH_GOOGLE);
-        error.statusCode = 400;
-        throw error;
+        throw new ApiError(400, MESSAGES.LOGIN_WITH_GOOGLE);
     }
 
     // Check Password
     const isMatch = await verifyHash(password, user.password);
     if (!isMatch) {
-        const error = new Error(MESSAGES.INVALID_EMAIL_PASSWORD);
-        error.statusCode = 401;
-        throw error;
+        throw new ApiError(401, MESSAGES.INVALID_EMAIL_PASSWORD);
     }
 
     const refreshTokenExpiry = rememberMe ? undefined : TOKEN_EXPIRY.REFRESH_TOKEN_SHORT;

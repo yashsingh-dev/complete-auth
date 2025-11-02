@@ -6,6 +6,7 @@ const helmet = require('helmet');
 
 const Limiter = require('./middlewares/rateLimit.middleware');
 const dbConnection = require('./db/connection');
+const { errorHandler } = require('./middlewares/errorHandler');
 const routes = require('./routes');
 
 const app = express();
@@ -23,6 +24,7 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 
 app.use(routes);
+app.use(errorHandler);
 
 
 module.exports = app;
