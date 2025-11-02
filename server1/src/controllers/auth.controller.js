@@ -3,13 +3,13 @@ const logger = require('../config/logger.config');
 const { secureHash } = require('../utils/crypto.utils');
 const { setAuthTokens, clearToken, clearTokenCookies } = require('../utils/setCookies.utils');
 const Service = require('../services/auth.service');
-const { MESSAGES, COOKIES, TOKEN_EXPIRY, OTP, FORGET_PASS } = require('../config/constants');
+const { MESSAGES, COOKIES, TOKEN_EXPIRY } = require('../config/constants');
 const { oauth2client } = require('../config/google.config');
 const { google } = require('googleapis');
 const { OAuth2Client } = require('google-auth-library');
 
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try {
         let { email, password, rememberMe } = req.body;
 
@@ -36,10 +36,7 @@ const login = async (req, res) => {
     }
     catch (error) {
         logger.error("Login Error: ", error);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -69,10 +66,7 @@ const register = async (req, res) => {
     }
     catch (error) {
         logger.error("Register Error: ", error);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -109,10 +103,7 @@ const googleLogin = async (req, res) => {
     catch (error) {
         logger.error("Google Login Error: ", error);
         clearTokenCookies(res);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -148,10 +139,7 @@ const googleOneTapLogin = async (req, res) => {
     catch (error) {
         logger.error("Google One Tap Login Error: ", error);
         clearTokenCookies(res);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -171,7 +159,7 @@ const checkAuth = async (req, res) => {
     }
     catch (error) {
         logger.error("CheckAuth Error: ", error);
-        return res.status(500).json({ success: false, error: MESSAGES.INTERNAL_SERVER_ERROR });
+        next(error);
     }
 }
 
@@ -204,10 +192,7 @@ const logout = async (req, res) => {
 
         // Always clear cookies on any logout error to prevent a bad state
         clearTokenCookies(res);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -237,10 +222,7 @@ const logoutAll = async (req, res) => {
 
         // Always clear cookies on any logout error to prevent a bad state
         clearTokenCookies(res);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -267,10 +249,7 @@ const sendVerifyEmailOtp = async (req, res) => {
     }
     catch (error) {
         logger.error("Send Verify Email Otp Error: ", error);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -290,10 +269,7 @@ const verifyEmail = async (req, res) => {
     }
     catch (error) {
         logger.error("Verify Email Error: ", error);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -307,10 +283,7 @@ const forgetPassword = async (req, res) => {
     }
     catch (error) {
         logger.error("Forget Password Error: ", error);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -324,10 +297,7 @@ const resetPassword = async (req, res) => {
     }
     catch (error) {
         logger.error("Reset Password: ", error);
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 
@@ -372,10 +342,7 @@ const refreshAccessToken = async (req, res) => {
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({ success: false, error: MESSAGES.SESSION_EXPIRE });
         }
-        return res.status(error.statusCode || 500).json({
-            success: false,
-            error: error.message || MESSAGES.INTERNAL_SERVER_ERROR
-        });
+        next(error);
     }
 }
 

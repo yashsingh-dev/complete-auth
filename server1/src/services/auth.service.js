@@ -46,9 +46,7 @@ const register = async (fullname, email, password) => {
     // Check User
     let user = await userModel.findOne({ email }).select('+password');
     if (user) {
-        const error = new Error(MESSAGES.USER_EXISTS);
-        error.statusCode = 409;
-        throw error;
+        throw new ApiError(409, MESSAGES.USER_EXISTS);
     }
 
     // Encyrpt Password
@@ -93,9 +91,7 @@ const logout = async (accessToken, refreshToken) => {
     // Check if the user from the token exists
     const user = await userModel.findById(decoded._id);
     if (!user) {
-        const error = new Error(MESSAGES.USER_NOT_FOUND);
-        error.statusCode = 409;
-        throw error;
+        throw new ApiError(409, MESSAGES.USER_NOT_FOUND);
     }
 
     // Create accessToken hash and it in blacklist collection
@@ -150,22 +146,16 @@ const verifyEmail = async (userId, token, code) => {
 
     // Check OTP
     if (!otp_model) {
-        const error = new Error(MESSAGES.OTP_EXPIRE);
-        error.statusCode = 410;
-        throw error;
+        throw new ApiError(410, MESSAGES.OTP_EXPIRE);
     }
 
     if (code !== otp_model.code) {
-        const error = new Error(MESSAGES.INCORRECT_OTP);
-        error.statusCode = 400;
-        throw error;
+        throw new ApiError(400, MESSAGES.INCORRECT_OTP);
     }
 
     // Check Token
     if (token !== otp_model.token) {
-        const error = new Error(MESSAGES.LINK_EXPIRE);
-        error.statusCode = 410;
-        throw error;
+        throw new ApiError(410, MESSAGES.LINK_EXPIRE);
     }
 
     //Delete Otp from Database
@@ -185,16 +175,12 @@ const forgetPassword = async (email) => {
     // Check User
     const user = await userModel.findOne({ email });
     if (!user) {
-        const error = new Error(MESSAGES.USER_NOT_FOUND);
-        error.statusCode = 404;
-        throw error;
+        throw new ApiError(404, MESSAGES.USER_NOT_FOUND);
     }
 
     // Check for google account
     if (user.isGoogleAccount) {
-        const error = new Error(MESSAGES.LOGIN_WITH_GOOGLE);
-        error.statusCode = 400;
-        throw error;
+        throw new ApiError(400, MESSAGES.LOGIN_WITH_GOOGLE);
     }
 
     // Generate a random token
@@ -217,9 +203,7 @@ const resetPassword = async (token, password) => {
         resetPasswordToken: token
     });
     if (!user) {
-        const error = new Error(MESSAGES.INVALID_TOKEN);
-        error.statusCode = 403;
-        throw error;
+        throw new ApiError(403, MESSAGES.INVALID_TOKEN);
     }
 
     if (user.resetPasswordExpiresAt.getTime() < Date.now()) {
@@ -228,9 +212,7 @@ const resetPassword = async (token, password) => {
         user.resetPasswordExpiresAt = undefined;
         await user.save();
 
-        const error = new Error(MESSAGES.LINK_EXPIRE);
-        error.statusCode = 410;
-        throw error;
+        throw new ApiError(410, MESSAGES.LINK_EXPIRE);
     };
 
     // New encrypted password
@@ -257,9 +239,7 @@ const refreshAccessToken = async (oldRefreshToken) => {
     const hashRefreshToken = secureHash(oldRefreshToken);
     const tokenDoc = await refreshTokenModel.findOne({ token: hashRefreshToken });
     if (!tokenDoc) {
-        const error = new Error(MESSAGES.INVALID_REFRESH_TOKEN);
-        error.statusCode = 403;
-        throw error;
+        throw new ApiError(403, MESSAGES.INVALID_REFRESH_TOKEN);
     }
 
     // Verify refresh token and expiry using its secret key
@@ -278,9 +258,7 @@ const refreshAccessToken = async (oldRefreshToken) => {
     const user = await userModel.findById(decoded._id);
 
     if (!user) {
-        const error = new Error(MESSAGES.USER_NOT_FOUND);
-        error.statusCode = 409;
-        throw error;
+        throw new ApiError(409, MESSAGES.USER_NOT_FOUND);
     }
 
     logger.info("Remain Expiry Time: " + expiryTime);
