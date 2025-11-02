@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { TOKEN_EXPIRY } = require('../config/constants');
 const refreshTokenModel = require('../models/refreshToken.model');
-const { secureHash } = require('../utils/crypto.utils');
+const { secureHash } = require('./crypto.utils');
 const logger = require('../config/logger.config');
 
 module.exports.generateAccessToken = async function (userId, tokenVersion) {

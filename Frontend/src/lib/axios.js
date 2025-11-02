@@ -1,7 +1,5 @@
 import axios from "axios";
-import toast from "react-hot-toast";
 import { refreshAccessToken } from '../store/useAuthStore';
-import { Constants } from "../config/constants";
 import { API } from "../config/api";
 
 export const axiosInstance = axios.create({

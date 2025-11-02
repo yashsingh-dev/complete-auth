@@ -12,10 +12,10 @@ services:
       - auth_network
     restart: unless-stopped
 
-  backend:
-    image: auth-backend:latest
-    build: ./Backend
-    container_name: backend
+  server1:
+    image: auth-server1:latest
+    build: ./server1
+    container_name: server1
     ports:
       - "8000:3000"
     environment:
@@ -54,7 +54,7 @@ services:
     ports:
       - "5173:80"
     depends_on:
-      - backend
+      - server1
     networks:
       - auth_network
     restart: unless-stopped

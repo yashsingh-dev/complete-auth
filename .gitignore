@@ -1,4 +1,4 @@
-# Node modules (frontend + backend)
+# Node modules (frontend + server)
 **/node_modules/
 
 *.todo
@@ -6,12 +6,12 @@
 # Environment files
 **/.env
 
-# Build output (React & any compiled backend)
+# Build output (React & any compiled server)
 Frontend/build/
-Backend/build/
+server1/build/
 
 Frontend/Readme.md
-Backend/Readme.md
+server1/Readme.md
 
 # Log files
 **/logs/

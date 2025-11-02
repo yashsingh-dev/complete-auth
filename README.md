@@ -57,7 +57,7 @@ cd complete-auth
 ### 2. Backend Setup
 
 ```
-cd Backend
+cd server1
 npm install
 ```
 
@@ -77,7 +77,7 @@ Don't forget to setup .env file from .env.example
 #### Terminal 1 (Backend)
 
 ```
-cd Backend
+cd server1
 npm run dev
 ```
 
