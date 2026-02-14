@@ -81,7 +81,7 @@ cd server1
 npm run dev
 ```
 
-#### Terminal 2 (Frontend)
+#### Terminal 2(Frontend)
 
 ```
 cd Frontend
